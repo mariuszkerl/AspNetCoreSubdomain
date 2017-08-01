@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <Version>0.0.1</Version>
+    <Authors>Mariusz Kerl</Authors>
+    <Company />
+    <Description>Create subdomain routes like default route semantics, build subdomain links with helpers.</Description>
+    <PackageTags>web mvc aspnet core routing subdomain</PackageTags>
+    <PackageReleaseNotes>Creating subdomain link in cshtml.
+Creating routes via builder helper commands.</PackageReleaseNotes>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.1.1" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@Html.SubdomainLink("Parameter in subdomain", "ParameterFromSubdomain", new { yourParameterName = "bydgoszcz" })
+@Html.SubdomainLink("Static parameter", "StaticSubdomain")
+@Html.SubdomainLink("Static parameter", "StaticSubdomain", new { id = "1" })
+----
+@Html.SubdomainLink("Multiple parameters example 1", "Parameters", new { yourParameterName2 = "bydgoszcz", id ="1" })
+@Html.SubdomainLink("Multiple parameters example 2", "Parameters", new { yourParameterName2 = "krakow", id = "2" })
+
+
+@Html.ActionLink("route1", "StaticSubdomain")
+@Html.ActionLink("route1", "StaticSubdomain", new { id ="1" })

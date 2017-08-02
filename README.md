@@ -9,7 +9,7 @@ It is important to note that order of routes is the same as standard asp net mvc
 1. Subdomain routes have to be declared before normal routes.
 2. Static subdomain routes have to be declared as last subdomain routes.
 3. You have to declare used hostnames in your application since todays subdomain diversity is really wide and it would be impossible to predefine those (it would be also insufficient).
-### startup.cs
+### Startup.cs
 ```csharp
 
 var hostnames = new[] { "localhost" };
@@ -21,6 +21,7 @@ routes.MapSubdomainRoute(
     "{parameterInSubdomain}",
     "{id}",
     new { controller = "Home", action = "Action1" });
+
     
 //example route http://subdomain.localhost/
 //example route http://subdomain.localhost/somecontroller
@@ -48,4 +49,11 @@ routes.MapSubdomainRoute(
     "subdomain2",
     "{controller}/{action}",
     new { controller = "Home", action = "Action4" });
+```
+
+### Your .cshtml files
+Goal of that library is not only catching routes for subdomain but also generating links to subdomains while persisting standard razor syntax. Helper below will generate url ```<a href="http://subdomain1.localhost/1">Hyperlink example</a>```. Route named SubdomainExample1 should catch that link and contain route values in ```RouteData.Values```
+```csharp
+@Html.SubdomainLink("Hyperlink example", "Action1", new { parameterInSubdomain = "subdomain1", id ="1" })
+<!--  -->
 ```

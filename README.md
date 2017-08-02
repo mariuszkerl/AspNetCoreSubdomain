@@ -60,3 +60,14 @@ Goal of that library is not only catching routes for subdomain but also generati
 ```csharp
 @Html.SubdomainLink("Hyperlink example", "Action1", new { parameterInSubdomain = "subdomain1", id ="1" })
 ```
+
+### Controller
+Big  advantage of library is you can catch all route values with controller.
+```csharp
+public IActionResult Action1(parameterInSubdomain, id)
+{
+    //code
+}
+```
+
+Having url ```http://subdomain1.localhost/1``` will invoke ```Action1``` method in ```Home```.

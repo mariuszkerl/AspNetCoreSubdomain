@@ -70,4 +70,4 @@ public IActionResult Action1(parameterInSubdomain, id)
 }
 ```
 
-Having url ```http://subdomain1.localhost/1``` will invoke ```Action1``` method in ```Home```.
+Having url ```http://subdomain1.localhost/1``` will invoke ```Action1``` method in ```Home``` controller.

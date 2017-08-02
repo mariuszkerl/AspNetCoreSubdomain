@@ -81,12 +81,7 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id}");
-                routes.MapRoute(
-                    "route",
-                    "{controller}/{action}",
-                    new { controller = "Home", action = "StaticSubdomain" }
-                    );
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

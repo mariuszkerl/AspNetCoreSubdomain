@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
-    <Version>0.0.1</Version>
+    <Version>0.1.0</Version>
     <Authors>Mariusz Kerl</Authors>
     <Company />
     <Description>Create subdomain routes like default route semantics, build subdomain links with helpers.</Description>

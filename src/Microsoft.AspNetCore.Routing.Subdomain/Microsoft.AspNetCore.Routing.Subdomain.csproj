@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
     <Version>0.0.1</Version>
     <Authors>Mariusz Kerl</Authors>
     <Company />

@@ -1,0 +1,16 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="jumbotron">
+                <p><strong>Route values</strong></p>
+                @foreach (var p in ViewContext.RouteData.Values)
+            {
+                    <p>
+                        @p.Key
+                        <code>@p.Value</code>
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

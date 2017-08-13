@@ -54,33 +54,37 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
                 var hostnames = new[] { "localhost" };
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "Example3",
-                    "{yourParameterName2}",
+                    "ParameterSubdomain1",
+                    "{parameter2}",
                     "{id}",
-                    new { controller = "Home", action = "Parameters" });
+                    new { controller = "Home", action = "Action3" });
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "Example1",
-                    "{yourParameterName}",
+                    "ParameterSubdomain2",
+                    "{parameter1}",
                     "{controller}/{action}",
-                    new { controller = "Home", action = "ParameterFromSubdomain" });
+                    new { controller = "Home", action = "Action2" });
 
                 //static subdomains have to be defined as last
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "Example4",
-                    "katowice",
+                    "StaticSubdomain1",
+                    "staticSubdomain1",
                     "{controller}/{action}/{id}",
-                    new { controller = "Home", action = "StaticSubdomain" });
+                    new { controller = "Home", action = "Action3", parameter2 = "staticParameter" });
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "Example2",
-                    "katowice",
+                    "StaticSubdomain2",
+                    "staticSubdomain2",
                     "{controller}/{action}",
-                    new { controller = "Home", action = "StaticSubdomain" });
+                    new { controller = "Home", action = "Action2" });
 
                 routes.MapRoute(
-                    name: "default",
+                    name: "NormalRoute",
+                    template: "{controller=Home}/{action=Index}/{parameter2}/{id}");
+
+                routes.MapRoute(
+                    name: "DefaultRoute",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }

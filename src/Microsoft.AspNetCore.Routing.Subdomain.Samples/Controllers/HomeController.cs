@@ -13,16 +13,16 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
             return View();
         }
 
-        public IActionResult StaticSubdomain()
+        public IActionResult Action1()
         {
             return View();
         }
 
-        public IActionResult ParameterFromSubdomain(string yourParameterName)
+        public IActionResult Action2(string parameter1)
         {
             return View();
         }
-        public IActionResult Parameters(string yourParameterName2, string id)
+        public IActionResult Action3(string parameter2, string id)
         {
             return View();
         }

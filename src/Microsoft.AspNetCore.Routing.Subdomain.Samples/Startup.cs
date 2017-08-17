@@ -51,7 +51,7 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
             app.UseMvc(routes =>
             {
-                var hostnames = new[] { "localhost" };
+                var hostnames = new[] { "localhost:54575" };
                 routes.MapSubdomainRoute(
                     hostnames,
                     "ParameterSubdomain1",

@@ -51,7 +51,7 @@ namespace Microsoft.AspNetCore.Routing
 
         public override Task RouteAsync(RouteContext context)
         {
-            var host = context.HttpContext.Request.Host.Host;
+            var host = context.HttpContext.Request.Host.Value;
 
             string foundHostname = GetHostname(host);
 
@@ -66,7 +66,7 @@ namespace Microsoft.AspNetCore.Routing
 
         protected override Task OnRouteMatched(RouteContext context)
         {
-            var host = context.HttpContext.Request.Host.Host;
+            var host = context.HttpContext.Request.Host.Value;
             var subdomain = host.Substring(0, host.IndexOf(GetHostname(host)) - 1);
             var routeData = new RouteData(context.RouteData);
 
@@ -169,11 +169,7 @@ namespace Microsoft.AspNetCore.Routing
         {
             var hostBuilder = BuildUrl(context, subdomainParameter);
 
-            var path = base.GetVirtualPath(new VirtualPathContext(context.HttpContext, context.AmbientValues, context.Values));
-
-            if (path == null) { return null; }
-
-            return new AbsolutPathData(this, path.VirtualPath, hostBuilder.ToString());
+            return GetVirtualPath(context, context.Values, hostBuilder);
         }
 
         private AbsolutPathData ParameterSubdomain(VirtualPathContext context, string subdomainParameter)
@@ -184,7 +180,12 @@ namespace Microsoft.AspNetCore.Routing
             var values = new RouteValueDictionary(context.Values);
             values.Remove(ParameterNameFrom(Subdomain));
 
-            var path = base.GetVirtualPath(new VirtualPathContext(context.HttpContext, context.AmbientValues, values));
+            return GetVirtualPath(context, values, hostBuilder);
+        }
+
+        private AbsolutPathData GetVirtualPath(VirtualPathContext context, RouteValueDictionary routeValues, StringBuilder hostBuilder)
+        {
+            var path = base.GetVirtualPath(new VirtualPathContext(context.HttpContext, context.AmbientValues, routeValues));
 
             if (path == null) { return null; }
 
@@ -193,13 +194,26 @@ namespace Microsoft.AspNetCore.Routing
 
         private StringBuilder BuildUrl(VirtualPathContext context, string subdomainValue)
         {
+            string foundHostname = GetHostname(context.HttpContext.Request.Host.Value);
+
+            string host = context.HttpContext.Request.Host.Value;
+            if (!string.IsNullOrEmpty(foundHostname))
+            {
+                var subdomain = context.HttpContext.Request.Host.Value.Substring(0, context.HttpContext.Request.Host.Value.IndexOf(foundHostname) - 1);
+
+                if (!string.IsNullOrEmpty(subdomain))
+                {
+                    host = foundHostname;
+                }
+            }
+
             var hostBuilder = new StringBuilder();
             hostBuilder
                 .Append(context.HttpContext.Request.Scheme)
                 .Append("://")
                 .Append(subdomainValue)
                 .Append(".")
-                .Append(context.HttpContext.Request.Host);
+                .Append(host);
 
             return hostBuilder;
         }

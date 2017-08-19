@@ -61,6 +61,11 @@ namespace Microsoft.AspNetCore.Routing
 
             var subdomain = host.Substring(0, host.IndexOf(GetHostname(host)) - 1);
 
+            if (!IsParameterName(Subdomain) && subdomain.ToLower() != Subdomain.ToLower())
+            {
+                return Task.CompletedTask;
+            }
+
             return base.RouteAsync(context);
         }
 

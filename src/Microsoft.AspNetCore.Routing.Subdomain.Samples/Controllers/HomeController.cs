@@ -26,6 +26,10 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
         {
             return View();
         }
+        public IActionResult Action4(string id)
+        {
+            return View();
+        }
         public IActionResult SubdomainsPage()
         {
             return View();

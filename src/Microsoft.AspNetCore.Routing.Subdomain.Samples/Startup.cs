@@ -52,6 +52,7 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
             app.UseMvc(routes =>
             {
                 var hostnames = new[] { "localhost:54575" };
+
                 routes.MapSubdomainRoute(
                     hostnames,
                     "SubdomainsPage",
@@ -61,28 +62,29 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "ParameterSubdomain1",
-                    "{parameter2}",
-                    "{id}",
-                    new { controller = "Home", action = "Action3" });
-                routes.MapSubdomainRoute(
-                    hostnames,
-                    "ParameterSubdomain2",
-                    "{parameter1}",
-                    "{controller}/{action}",
-                    new { controller = "Home", action = "Action2" });
-
-                //static subdomains have to be defined as last
-                routes.MapSubdomainRoute(
-                    hostnames,
                     "StaticSubdomain1",
                     "staticSubdomain1",
                     "{controller}/{action}/{id}",
-                    new { controller = "Home", action = "Action3", parameter2 = "staticParameter" });
+                    new { controller = "Home", action = "Action4" });
+
                 routes.MapSubdomainRoute(
                     hostnames,
                     "StaticSubdomain2",
                     "staticSubdomain2",
+                    "{controller}/{action}",
+                    new { controller = "Home", action = "Action2" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "ParameterSubdomain1",
+                    "{parameter2}",
+                    "{id}",
+                    new { controller = "Home", action = "Action3" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "ParameterSubdomain2",
+                    "{parameter1}",
                     "{controller}/{action}",
                     new { controller = "Home", action = "Action2" });
 

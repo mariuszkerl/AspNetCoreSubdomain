@@ -4,12 +4,15 @@
 
 <div class="row">
     <div class="col-xs-12">
-        @Html.SubdomainLink("(1) Catched by route ParameterSubdomain1", "Action3", new { parameter2 = "subdomain2", id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-        @Html.SubdomainLink("(2) Catched by route ParameterSubdomain1", "Action3", new { parameter2 = "subdomain3", id = "2" }, new { @class = "btn btn-primary btn-lg btn-block" })
-        @Html.SubdomainLink("(3) Catched by route ParameterSubdomain2", "Action2", new { parameter1 = "subdomain1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-        @Html.SubdomainLink("(4) Catched by route StaticSubdomain1", "Action4", new { id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-        @Html.SubdomainLink("(5) Catched by route StaticSubdomain2", "Action2", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
-        @Html.ActionLink("(6) Catched by route DefaultRoute", "Action1", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
-        @Html.ActionLink("(7) Catched by route NormalRoute", "Action3", new { parameter2 = "notsubdomain", id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
+                @Html.SubdomainLink("(1) Catched by route ParameterSubdomaint1", "Action2", new { parameter1 = "subdomain1" }, new { @class = "btn btn-primary btn-lg btn-block" })
+                        @Html.SubdomainLink("(1) Catched by route ParameterSubdomaint2", "Action3", new { parameter2 = "subdomain2", id="1" }, new { @class = "btn btn-primary btn-lg btn-block" })
+                                @Html.SubdomainLink("(1) Catched by route ParameterSubdomaint3", "Action5", new { id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @*@Html.SubdomainLink("(2) Catched by route ParameterSubdomain1", "Action3", new { parameter2 = "subdomain3", id = "2" }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @Html.SubdomainLink("(3) Catched by route ParameterSubdomain2", "Action2", new { parameter1 = "subdomain1" }, new { @class = "btn btn-primary btn-lg btn-block" })*@
+        @Html.SubdomainLink("(4) Catched by route StaticSubdomain1", "Action4", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @Html.SubdomainLink("(5) Catched by route StaticSubdomain2", "Action4", "Home", new { parameter = "testparameter" }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @*@Html.ActionLink("(6) Catched by route DefaultRoute", "Action1", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @Html.ActionLink("(7) Catched by route NormalRoute", "Action3", new { parameter2 = "notsubdomain", id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })*@
+        @*@Html.SubdomainLink("(5) Catched by route StaticSubdomain2", "SubdomainsPage", "Home", new { }, new { @class = "btn btn-primary btn-lg btn-block" })*@
     </div>
 </div>

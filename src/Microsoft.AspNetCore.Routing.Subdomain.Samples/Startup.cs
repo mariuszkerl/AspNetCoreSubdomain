@@ -55,6 +55,19 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
                 routes.MapSubdomainRoute(
                     hostnames,
+                    "StaticSubdomain1",
+                    "staticSubdomain1",
+                    "{controller}/{action}/{parameter}/");
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "StaticSubdomain2",
+                    "staticSubdomain2",
+                    "test",
+                    new { controller = "Home", action = "Action4" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
                     "SubdomainsPage",
                     "subdomains.page",
                     "",
@@ -62,30 +75,23 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "StaticSubdomain1",
-                    "staticSubdomain1",
-                    "{controller}/{action}/{id}",
-                    new { controller = "Home", action = "Action4" });
-
-                routes.MapSubdomainRoute(
-                    hostnames,
-                    "StaticSubdomain2",
-                    "staticSubdomain2",
-                    "{controller}/{action}",
-                    new { controller = "Home", action = "Action2" });
-
-                routes.MapSubdomainRoute(
-                    hostnames,
-                    "ParameterSubdomain1",
+                    "ParameterSubdomaint2",
                     "{parameter2}",
                     "{id}",
                     new { controller = "Home", action = "Action3" });
 
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "ParameterSubdomain2",
+                    "ParameterSubdomaint3",
+                    "{controller}",
+                    "{action}/{id}",
+                    new { controller = "Home" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "ParameterSubdomaint1",
                     "{parameter1}",
-                    "{controller}/{action}",
+                    "",
                     new { controller = "Home", action = "Action2" });
 
                 routes.MapRoute(

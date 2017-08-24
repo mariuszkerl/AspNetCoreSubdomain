@@ -64,7 +64,7 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
                     "StaticSubdomain2",
                     "staticSubdomain2",
                     "test",
-                    new { controller = "Home", action = "Action4" });
+                    new { controller = "Home", action = "Action1" });
 
                 routes.MapSubdomainRoute(
                     hostnames,
@@ -75,21 +75,21 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "ParameterSubdomaint2",
+                    "ParameterSubdomain1",
                     "{parameter2}",
                     "{id}",
                     new { controller = "Home", action = "Action3" });
 
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "ParameterSubdomaint3",
+                    "ParameterSubdomain2",
                     "{controller}",
                     "{action}/{id}",
                     new { controller = "Home" });
 
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "ParameterSubdomaint1",
+                    "ParameterSubdomain3",
                     "{parameter1}",
                     "",
                     new { controller = "Home", action = "Action2" });

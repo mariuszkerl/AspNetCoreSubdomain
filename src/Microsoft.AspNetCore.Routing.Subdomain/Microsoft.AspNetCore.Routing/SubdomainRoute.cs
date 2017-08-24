@@ -66,6 +66,11 @@ namespace Microsoft.AspNetCore.Routing
                 return Task.CompletedTask;
             }
             
+            //that's for overriding default for subdomain
+            if(IsParameterName(Subdomain))
+            {
+                context.RouteData.Values.Add(ParameterNameFrom(Subdomain), subdomain);
+            }
             return base.RouteAsync(context);
         }
 

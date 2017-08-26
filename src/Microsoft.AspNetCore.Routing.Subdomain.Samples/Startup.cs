@@ -51,32 +51,47 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
             app.UseMvc(routes =>
             {
-                var hostnames = new[] { "localhost" };
+                var hostnames = new[] { "localhost:54575" };
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "StaticSubdomain1",
+                    "staticSubdomain1",
+                    "{controller}/{action}/{parameter}/");
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "StaticSubdomain2",
+                    "staticSubdomain2",
+                    "test",
+                    new { controller = "Home", action = "Action1" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "SubdomainsPage",
+                    "subdomains.page",
+                    "",
+                    new { controller = "Home", action = "SubdomainsPage" });
+
                 routes.MapSubdomainRoute(
                     hostnames,
                     "ParameterSubdomain1",
                     "{parameter2}",
                     "{id}",
                     new { controller = "Home", action = "Action3" });
+
                 routes.MapSubdomainRoute(
                     hostnames,
                     "ParameterSubdomain2",
-                    "{parameter1}",
-                    "{controller}/{action}",
-                    new { controller = "Home", action = "Action2" });
+                    "{controller}",
+                    "{action}/{id}",
+                    new { controller = "Home" });
 
-                //static subdomains have to be defined as last
                 routes.MapSubdomainRoute(
                     hostnames,
-                    "StaticSubdomain1",
-                    "staticSubdomain1",
-                    "{controller}/{action}/{id}",
-                    new { controller = "Home", action = "Action3", parameter2 = "staticParameter" });
-                routes.MapSubdomainRoute(
-                    hostnames,
-                    "StaticSubdomain2",
-                    "staticSubdomain2",
-                    "{controller}/{action}",
+                    "ParameterSubdomain3",
+                    "{parameter1}",
+                    "",
                     new { controller = "Home", action = "Action2" });
 
                 routes.MapRoute(

@@ -19,5 +19,12 @@ namespace Microsoft.AspNetCore.Builder
 
             return routeBuilder;
         }
+        public static IRouteBuilder MapRoute(this IRouteBuilder routeBuilder, string[] hostnames, string name, string template, object defaults)
+        {
+            routeBuilder.Routes.Add(new SubDomainRoute(hostnames, null, routeBuilder.DefaultHandler, name, template, new RouteValueDictionary(defaults), null, null,
+                new DefaultInlineConstraintResolver((IOptions<RouteOptions>)routeBuilder.ServiceProvider.GetService(typeof(IOptions<RouteOptions>)))));
+
+            return routeBuilder;
+        }
     }
 }

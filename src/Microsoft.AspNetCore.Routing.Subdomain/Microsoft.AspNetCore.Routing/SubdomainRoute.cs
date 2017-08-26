@@ -55,9 +55,13 @@ namespace Microsoft.AspNetCore.Routing
 
             string foundHostname = GetHostname(host);
 
-
-            if (foundHostname == null)
+            if (foundHostname == null && Subdomain != null)
                 return Task.CompletedTask;
+
+            if(Subdomain == null)
+            {
+                return base.RouteAsync(context);
+            }
 
             var subdomain = host.Substring(0, host.IndexOf(GetHostname(host)) - 1);
 
@@ -76,6 +80,10 @@ namespace Microsoft.AspNetCore.Routing
 
         protected override Task OnRouteMatched(RouteContext context)
         {
+            if(Subdomain == null)
+            {
+                return base.OnRouteMatched(context);
+            }
             var host = context.HttpContext.Request.Host.Value;
             var subdomain = host.Substring(0, host.IndexOf(GetHostname(host)) - 1);
             var routeData = new RouteData(context.RouteData);
@@ -96,6 +104,11 @@ namespace Microsoft.AspNetCore.Routing
             if(!(context is SubdomainVirtualPathContext))
             {
                 return null;
+            }
+
+            if(Subdomain == null)
+            {
+                return GetVirtualPath(context, context.Values, BuildUrl(context));
             }
 
             var subdomainParameter = IsParameterName(Subdomain) ? ParameterNameFrom(Subdomain) : Subdomain;
@@ -187,14 +200,14 @@ namespace Microsoft.AspNetCore.Routing
 
         private AbsolutPathData StaticSubdomain(VirtualPathContext context, string subdomainParameter)
         {
-            var hostBuilder = BuildUrl(context, subdomainParameter);
+            var hostBuilder = BuilSubdomaindUrl(context, subdomainParameter);
 
             return GetVirtualPath(context, context.Values, hostBuilder);
         }
 
         private AbsolutPathData ParameterSubdomain(VirtualPathContext context, string subdomainValue)
         {
-            var hostBuilder = BuildUrl(context, subdomainValue);
+            var hostBuilder = BuilSubdomaindUrl(context, subdomainValue);
 
             //we have to remove our subdomain so it will not be added as query string while using GetVirtualPath method
             var values = new RouteValueDictionary(context.Values);
@@ -212,7 +225,31 @@ namespace Microsoft.AspNetCore.Routing
             return new AbsolutPathData(this, path.VirtualPath, hostBuilder.ToString());
         }
 
-        private StringBuilder BuildUrl(VirtualPathContext context, string subdomainValue)
+        private StringBuilder BuildUrl(VirtualPathContext context)
+        {            
+            string foundHostname = GetHostname(context.HttpContext.Request.Host.Value);
+
+            string host = context.HttpContext.Request.Host.Value;
+            if (!string.IsNullOrEmpty(foundHostname))
+            {
+                var subdomain = context.HttpContext.Request.Host.Value.Substring(0, context.HttpContext.Request.Host.Value.IndexOf(foundHostname) - 1);
+
+                if (!string.IsNullOrEmpty(subdomain))
+                {
+                    host = foundHostname;
+                }
+            }
+
+            var hostBuilder = new StringBuilder();
+            hostBuilder
+                .Append(context.HttpContext.Request.Scheme)
+                .Append("://")
+                .Append(host);
+
+                return hostBuilder;
+        }
+
+        private StringBuilder BuilSubdomaindUrl(VirtualPathContext context, string subdomainValue)
         {
             string foundHostname = GetHostname(context.HttpContext.Request.Host.Value);
 

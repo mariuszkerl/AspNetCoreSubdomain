@@ -2,13 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Mariusz Kerl</Authors>
     <Company />
     <Description>Create subdomain routes like default route semantics, build subdomain links with helpers.</Description>
     <PackageTags>web mvc aspnet core routing subdomain</PackageTags>
-    <PackageReleaseNotes>Creating subdomain link in cshtml.
-Creating routes via builder helper commands.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+    Defaults can be used on subdomain parameter.
+    More then one static subdomain can be created.
+    Subdomain links are generated correctly while host has subdomain.
+    </PackageReleaseNotes>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
     <Copyright>Mariusz Kerl</Copyright>

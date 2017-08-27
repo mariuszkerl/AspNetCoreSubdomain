@@ -108,16 +108,7 @@ namespace Microsoft.AspNetCore.Routing
             else
             {
                 if (!IsParameterName(Subdomain))
-                {
-                    //todo: there is a problem if more then one static subdomain is defined because if it is then the first one will be matched.
-                    //var binder = Binder(context.HttpContext);
-                    //var values = binder.GetValues(context.AmbientValues, context.Values);
-                    //if(values == null)
-                    //{
-                    //    return null;
-                    //}
-                    //var path = binder.BindValues(values.AcceptedValues);
-                    //return null;
+                {                   
                     return StaticSubdomain(context, subdomainParameter);
                 }
             }

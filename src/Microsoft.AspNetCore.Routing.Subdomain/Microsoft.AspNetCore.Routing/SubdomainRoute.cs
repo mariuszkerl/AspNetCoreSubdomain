@@ -18,21 +18,6 @@ namespace Microsoft.AspNetCore.Routing
 
         public string Subdomain { get; private set; }
 
-        public SubDomainRoute(string[] hostnames, string subdomain, IRouter target, string routeTemplate, IInlineConstraintResolver inlineConstraintResolver)
-        : base(target, routeTemplate, inlineConstraintResolver)
-        {
-            Hostnames = hostnames;
-            Subdomain = subdomain;
-        }
-
-        public SubDomainRoute(string[] hostnames, string subdomain, IRouter target, string routeTemplate, RouteValueDictionary defaults, IDictionary<string, object> constraints,
-            RouteValueDictionary dataTokens, IInlineConstraintResolver inlineConstraintResolver)
-            : base(target, routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
-        {
-            Hostnames = hostnames;
-            Subdomain = subdomain;
-        }
-
         public SubDomainRoute(string[] hostnames, string subdomain, IRouter target, string routeName, string routeTemplate, RouteValueDictionary defaults, IDictionary<string, object> constraints,
            RouteValueDictionary dataTokens, IInlineConstraintResolver inlineConstraintResolver)
            : base(target, routeName, routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
@@ -40,15 +25,6 @@ namespace Microsoft.AspNetCore.Routing
             Hostnames = hostnames;
             Subdomain = subdomain;
         }
-
-        //public SubDomainRoute(string subdomain, string url, RouteValueDictionary defaults, RouteValueDictionary constraints, IRouteHandler routeHandler)
-        //    : base(url, defaults, constraints, routeHandler) { Subdomain = subdomain; }
-        //
-
-        //public SubDomainRoute(string subdomain, string url, RouteValueDictionary defaults, RouteValueDictionary constraints, 
-        //    RouteValueDictionary dataTokens, IRouteHandler routeHandler)
-        //    : base(url, defaults, constraints, dataTokens, routeHandler) { Subdomain = subdomain; }
-
         public override Task RouteAsync(RouteContext context)
         {
             var host = context.HttpContext.Request.Host.Value;

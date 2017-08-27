@@ -71,9 +71,7 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
                     "SubdomainsPage",
                     "subdomains.page",
                     "",
-                    new { controller = "Home", action = "SubdomainsPage" });
-
-                routes.MapRoute(hostnames, "NormalRouteTest", "{language}/{controller}/{action}", new { Action = "Index", Controller = "Home", Language = "English" });
+                    new { controller = "Home", action = "SubdomainsPage" });                
 
                 routes.MapSubdomainRoute(
                     hostnames,
@@ -100,7 +98,7 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
                 // routes.MapRoute(
                 //     name: "NormalRoute",
                 //     template: "{controller=Home}/{action=Index}/{parameter2}/{id}");
-
+routes.MapRoute(hostnames, "NormalRouteTest", "{language}/{controller}/{action}", new { Action = "Index", Controller = "Home", Language = "English" });
                 routes.MapRoute(
                     name: "DefaultRoute",
                     template: "{controller=Home}/{action=Index}/{id?}");

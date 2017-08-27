@@ -22,8 +22,9 @@
         <h3><small>StaticSubdomain2</small></h3>
         @Html.SubdomainLink("Link 1", "Action1", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
         <h2>Normal links&nbsp;<small>Links in red are not working correctly yet.</small></h2>
-        @Html.ActionLink("(6) Catched by route DefaultRoute", "Action1", new { language = "English" }, new { @class = "btn btn-danger btn-lg btn-block" })
-        @Html.SubdomainLink("(7) Catched by route NormalRoute", "Index", new { language = "English" }, new { @class = "btn btn-danger btn-primary btn-lg btn-block" })
-        @Html.ActionLink("(7) Catched by route NormalRoute", "Action3", new { parameter2 = "notsubdomain", id = "1" }, new { @class = "btn btn-danger btn-primary btn-lg btn-block" })
+        @Html.SubdomainLink("Link 1", "Index", new { language = "English" }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @Html.SubdomainLink("Link 2", "Index", new { language = "Polish" }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @Html.SubdomainLink("Link 3", "Index", "Test", new { language = "English" }, new { @class = "btn btn-primary btn-lg btn-block" })
+        @Html.SubdomainLink("Link 4", "Action1", "Test", new { language = "Polish" }, new { @class = "btn btn-primary btn-lg btn-block" })
     </div>
 </div>

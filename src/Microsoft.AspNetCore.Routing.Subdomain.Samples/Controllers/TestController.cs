@@ -8,6 +8,10 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
 {
     public class TestController : Controller
     {
+        public IActionResult Index(string language)
+        {
+            return View();
+        }
         public IActionResult Action1(string id)
         {
             return View();

@@ -27,8 +27,10 @@
             <h3><small>StaticSubdomain2</small></h3>
             @Html.SubdomainLink("Link 1", "Action1", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
             <h3><small>Normal MVC Routes</small></h3>
-            @Html.ActionLink("DefaultRoute", "Action1", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.ActionLink("NormalRoute", "Action3", new { parameter2 = "notsubdomain", id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
+            @Html.SubdomainLink("Link 1", "Index", new { language = "English" }, new { @class = "btn btn-primary btn-lg btn-block" })
+            @Html.SubdomainLink("Link 2", "Index", new { language = "Polish" }, new { @class = "btn btn-primary btn-lg btn-block" })
+            @Html.SubdomainLink("Link 3", "Index", "Test", new { language = "English" }, new { @class = "btn btn-primary btn-lg btn-block" })
+            @Html.SubdomainLink("Link 4", "Action1", "Test", new { language = "Polish" }, new { @class = "btn btn-primary btn-lg btn-block" })
             <h2>Subdomains page&nbsp;<small>Page for checking if subdomain links are generated correctly while on subdomain.</small></h2>
             @Html.SubdomainLink("Subdomain page index", "SubdomainsPage", "Home", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
         </div>

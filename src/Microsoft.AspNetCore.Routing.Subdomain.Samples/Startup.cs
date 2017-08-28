@@ -96,8 +96,8 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
                 routes.MapRoute(hostnames, 
                 "NormalRoute", 
-                "{language}/{controller}/{action}", 
-                new { Action = "Index", Controller = "Home", Language = "English" });
+                "{controller}/{action}", 
+                new { Action = "Index", Controller = "Home" });
             });
         }
     }

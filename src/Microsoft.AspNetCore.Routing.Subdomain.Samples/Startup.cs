@@ -94,13 +94,10 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
                     "",
                     new { controller = "Home", action = "Action2" });
 
-                routes.MapRoute(
-                    name: "NormalRoute",
-                    template: "{controller=Home}/{action=Index}/{parameter2}/{id}");
-
-                routes.MapRoute(
-                    name: "DefaultRoute",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(hostnames, 
+                "NormalRoute", 
+                "{language}/{controller}/{action}", 
+                new { Action = "Index", Controller = "Home", Language = "English" });
             });
         }
     }

@@ -207,9 +207,9 @@ namespace Microsoft.AspNetCore.Routing
             return BuildAbsoluteUrl(context, (hostBuilder, host) =>
             {
                 hostBuilder
-                .Append(subdomainValue)
-                .Append(".")
-                .Append(host);
+                    .Append(subdomainValue)
+                    .Append(".")
+                    .Append(host);
             });
         }
 
@@ -228,11 +228,12 @@ namespace Microsoft.AspNetCore.Routing
                 }
             }
 
-            var hostBuilder = new StringBuilder();
-            hostBuilder
-            .Append(context.HttpContext.Request.Scheme)
-            .Append("://");
+            var hostBuilder = new StringBuilder()
+                .Append(context.HttpContext.Request.Scheme)
+                .Append("://");
+                
             buildAction(hostBuilder, host);
+
             return hostBuilder;
         }
 

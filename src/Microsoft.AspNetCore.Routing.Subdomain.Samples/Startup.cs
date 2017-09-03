@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 {
@@ -28,6 +29,7 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddSubdomains();
             services.AddMvc();
         }
 
@@ -72,6 +74,13 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
                     "subdomains.page",
                     "",
                     new { controller = "Home", action = "SubdomainsPage" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "SubdomainFormsPage",
+                    "subdomain.forms.page",
+                    "",
+                    new { controller = "Home", action = "SubdomainFormsPage" });
 
                 routes.MapSubdomainRoute(
                     hostnames,

@@ -1,37 +1,16 @@
-﻿@{
+﻿@model string
+@{
     ViewData["Title"] = "Home Page";
+    var bootstrapBtn = new { @class = "btn btn-primary btn-lg btn-block" };
 }
 
+@Html.Partial("_DisplayModel", Model)
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
-            <h2>Routes:</h2>
-            <h3><small>ParameterSubdomain1</small></h3>
-
-            @Html.SubdomainLink("Link 1", "Action3", new { parameter2 = "subdomain1", id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 2", "Action3", new { parameter2 = "subdomain2", id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 3", "Action3", new { parameter2 = "subdomain2", id = "2" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            <h3><small>ParameterSubdomain2</small></h3>
-            @Html.SubdomainLink("Link 1", "Action4", new { id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 2", "Action4", new { id = "2" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 3", "Action5", new { id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 4", "Action5", new { id = "2" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 5", "Action1", "Test", new { id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 6", "Action1", "Test", new { id = "2" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 7", "Action2", "Test", new { id = "1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 8", "Action2", "Test", new { id = "2" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            <h3><small>ParameterSubdomain3</small></h3>
-            @Html.SubdomainLink("Link 1", "Action2", new { parameter1 = "subdomain1" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            <h3><small>StaticSubdomain1</small></h3>
-            @Html.SubdomainLink("Link 1", "Action4", "Home", new { parameter = "testparameter" }, new { @class = "btn btn-primary btn-lg btn-block" })
-            <h3><small>StaticSubdomain2</small></h3>
-            @Html.SubdomainLink("Link 1", "Action1", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
-            <h3><small>Normal MVC Routes</small></h3>
-            @Html.SubdomainLink("Link 1", "Index", new {}, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 2", "Index", "Test", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
-            @Html.SubdomainLink("Link 3", "Action1", "Test", new {  }, new { @class = "btn btn-primary btn-lg btn-block" })
+            @Html.Partial("Urls")
             <h2>Subdomains page&nbsp;<small>Page for checking if subdomain links are generated correctly while on subdomain.</small></h2>
-            @Html.SubdomainLink("Subdomain page index", "SubdomainsPage", "Home", new { }, new { @class = "btn btn-primary btn-lg btn-block" })
+            @Html.ActionLink("Subdomain page index", "SubdomainsPage", "Home", new { }, bootstrapBtn)
         </div>
     </div>
 </div>

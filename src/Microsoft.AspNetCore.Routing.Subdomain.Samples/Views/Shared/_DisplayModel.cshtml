@@ -1,0 +1,9 @@
+@model string
+@if (!string.IsNullOrEmpty(Model))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12"><div class="alert alert-info" role="alert"><strong>Post value: </strong>@Model</div></div>
+        </div>
+    </div>
+}

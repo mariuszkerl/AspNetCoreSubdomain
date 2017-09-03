@@ -77,6 +77,13 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
 
                 routes.MapSubdomainRoute(
                     hostnames,
+                    "SubdomainFormsPage",
+                    "subdomain.forms.page",
+                    "",
+                    new { controller = "Home", action = "SubdomainFormsPage" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
                     "ParameterSubdomain1",
                     "{parameter2}",
                     "{id}",

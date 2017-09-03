@@ -76,5 +76,9 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
         {
             return View();
         }
+        public IActionResult SubdomainFormsPage()
+        {
+            return View();
+        }
     }
 }

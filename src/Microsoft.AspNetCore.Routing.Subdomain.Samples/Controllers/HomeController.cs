@@ -13,14 +13,31 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Index(string model)
+        {
+            return View(model: model);
+        }
+
         public IActionResult Action1()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult Action1(string model)
+        {
+            return View(model: model);
         }
 
         public IActionResult Action2(string parameter1)
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Action2(string parameter1, string model)
+        {
+            return View(model: model);
         }
         public IActionResult Action3(string parameter2, string id)
         {
@@ -36,9 +53,20 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Action4(string id, string model)
+        {
+            return View(model: model);
+        }
         public IActionResult Action5(string id)
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Action5(string id, string model)
+        {
+            return View(model: model);
         }
         public IActionResult SubdomainsPage()
         {

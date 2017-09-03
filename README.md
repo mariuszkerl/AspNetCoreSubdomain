@@ -74,7 +74,7 @@ For samples definitely look at ```Samples``` project. For running it you have to
     127.0.0.1	subdomains.page.localhost
     127.0.0.1	subdomain.forms.page.localhost
 ```
-### {YourPath}\AspNetCoreSubdomain\src\.vs\config
+### {YourPath}\AspNetCoreSubdomain\src\.vs\config\applicationhost.config
 That's only needed if running with Visual Studio.
 Modify section ```<bindings>``` add:
 ```xml

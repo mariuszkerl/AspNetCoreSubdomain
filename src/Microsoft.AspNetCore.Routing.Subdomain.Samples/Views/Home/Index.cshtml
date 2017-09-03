@@ -4,13 +4,12 @@
     var bootstrapBtn = new { @class = "btn btn-primary btn-lg btn-block" };
 }
 
+@Html.Partial("_NavPills")
 @Html.Partial("_DisplayModel", Model)
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
             @Html.Partial("Urls")
-            <h2>Subdomains page&nbsp;<small>Page for checking if subdomain links are generated correctly while on subdomain.</small></h2>
-            @Html.ActionLink("Subdomain page index", "SubdomainsPage", "Home", new { }, bootstrapBtn)
         </div>
     </div>
 </div>

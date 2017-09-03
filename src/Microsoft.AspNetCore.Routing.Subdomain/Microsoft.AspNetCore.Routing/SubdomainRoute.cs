@@ -78,13 +78,16 @@ namespace Microsoft.AspNetCore.Routing
 
         public override VirtualPathData GetVirtualPath(VirtualPathContext context)
         {
-            if (!(context is SubdomainVirtualPathContext))
-            {
-                return null;
-            }
-
+            //todo: we could check also if current host is subdomain, if it is not then use base GetVirtualPathContext for normal url
             if (Subdomain == null)
             {
+                //if route is without subdomain and we are on host without subdomain use base method
+                //we don't need whole URL for such case
+                if (GetHostname(context.HttpContext.Request.Host.Value) == null)
+                {
+                    return base.GetVirtualPath(context);
+                }
+
                 return GetVirtualPath(context, context.Values, BuildUrl(context));
             }
 
@@ -190,7 +193,7 @@ namespace Microsoft.AspNetCore.Routing
 
             if (path == null) { return null; }
 
-            return new AbsolutPathData(this, path.VirtualPath, hostBuilder.ToString());
+            return new AbsolutPathData(this, path.VirtualPath, hostBuilder.ToString(), context.HttpContext.Request.Scheme);
         }
 
         private StringBuilder BuildUrl(VirtualPathContext context)
@@ -228,21 +231,11 @@ namespace Microsoft.AspNetCore.Routing
                 }
             }
 
-            var hostBuilder = new StringBuilder()
-                .Append(context.HttpContext.Request.Scheme)
-                .Append("://");
+            var hostBuilder = new StringBuilder();
                 
             buildAction(hostBuilder, host);
 
             return hostBuilder;
-        }
-
-        private TemplateBinder Binder(HttpContext context)
-        {
-            //that's from RouteBase.cs
-            var urlEncoder = context.RequestServices.GetRequiredService<UrlEncoder>();
-            var pool = context.RequestServices.GetRequiredService<ObjectPool<UriBuildingContext>>();
-            return new TemplateBinder(urlEncoder, pool, ParsedTemplate, Defaults);
         }
     }
 }

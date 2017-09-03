@@ -1,0 +1,41 @@
+@{
+    var bootstrapBtn = new { @class = "btn btn-primary btn-lg btn-block" };
+
+    var link1 = new { parameter2 = "subdomain1", id = "1" };
+    var link2 = new { parameter2 = "subdomain2", id = "1" };
+    var link3 = new { parameter2 = "subdomain2", id = "2" };
+    var link4 = new { id = "1" };
+    var link5 = new { id = "2" };
+    var link6 = new { id = "1" };
+    var link7 = new { id = "2" };
+    var link8 = new { id = "1" };
+    var link9 = new { id = "2" };
+    var link10 = new { id = "1" };
+    var link11 = new { id = "2" };
+    var link12 = new { parameter1 = "subdomain1" };
+    var link13 = new { parameter = "testparameter" };
+}
+<h2>Routes:</h2>
+<h3><small>ParameterSubdomain1</small></h3>
+@Html.ActionLink(Url.Action("Action3", link1), "Action3", link1, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action3", link2), "Action3", link2, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action3", link3), "Action3", link3, bootstrapBtn)
+<h3><small>ParameterSubdomain2</small></h3>
+@Html.ActionLink(Url.Action("Action4", link4), "Action4", link4, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action4", link5), "Action4", link5, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action5", link6), "Action5", link6, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action5", link7), "Action5", link7, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action1", "Test", link8), "Action1", "Test", link8, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action1", "Test", link9), "Action1", "Test", link9, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action2", "Test", link10), "Action2", "Test", link10, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action2", "Test", link11), "Action2", "Test", link11, bootstrapBtn)
+<h3><small>ParameterSubdomain3</small></h3>
+@Html.ActionLink(Url.Action("Action2", link12), "Action2", link12, bootstrapBtn)
+<h3><small>StaticSubdomain1</small></h3>
+@Html.ActionLink(Url.Action("Action4", "Home", link13), "Action4", "Home", link13, bootstrapBtn)
+<h3><small>StaticSubdomain2</small></h3>
+@Html.ActionLink(Url.Action("Action1", new { }), "Action1", new { }, bootstrapBtn)
+<h3><small>Normal MVC Routes</small></h3>
+@Html.ActionLink(Url.Action("Index"), "Index", new { }, bootstrapBtn)
+@Html.ActionLink(Url.Action("Index", "Test"),"Index", "Test", new { }, bootstrapBtn)
+@Html.ActionLink(Url.Action("Action1", "Text"), "Action1", "Test", new { }, bootstrapBtn)

@@ -1,0 +1,184 @@
+@{
+    var bootstrapBtn = new { @class = "btn btn-primary" };
+
+    var link1 = new { parameter2 = "subdomain1", id = "1" };
+    var link2 = new { parameter2 = "subdomain2", id = "1" };
+    var link3 = new { parameter2 = "subdomain2", id = "2" };
+    var link4 = new { id = "1" };
+    var link5 = new { id = "2" };
+    var link6 = new { id = "1" };
+    var link7 = new { id = "2" };
+    var link8 = new { id = "1" };
+    var link9 = new { id = "2" };
+    var link10 = new { id = "1" };
+    var link11 = new { id = "2" };
+    var link12 = new { parameter1 = "subdomain1" };
+    var link13 = new { parameter = "testparameter" };
+}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3><small>ParameterSubdomain1</small></h3>
+            @using (Html.BeginForm("Action3", "Home", link1, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action3", "Home", link1)</button>
+            }
+
+            @using (Html.BeginForm("Action3", "Home", link2, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action3", "Home", link2)</button>
+            }
+
+            @using (Html.BeginForm("Action3", "Home", link3, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action3", "Home", link3)</button>
+            }
+            <h3><small>ParameterSubdomain2</small></h3>
+            @using (Html.BeginForm("Action4", "Home", link4, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action4", link4)</button>
+            }
+            @using (Html.BeginForm("Action4", "Home", link5, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action4", link5)</button>
+            }
+            @using (Html.BeginForm("Action5", "Home", link6, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action5", link6)</button>
+            }
+            @using (Html.BeginForm("Action5", "Home", link7, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action5", link7)</button>
+            }
+            @using (Html.BeginForm("Action1", "Test", link8, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action1", "Test", link8)</button>
+            }
+            @using (Html.BeginForm("Action1", "Test", link9, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action1", "Test", link9)</button>
+            }
+            @using (Html.BeginForm("Action2", "Test", link10, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action2", "Test", link10)</button>
+            }
+            @using (Html.BeginForm("Action2", "Test", link11, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action2", "Test", link11)</button>
+            }
+            <h3><small>ParameterSubdomain3</small></h3>
+            @using (Html.BeginForm("Action2", "Home", link12, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action2", "Home", link12)</button>
+            }
+            <h3><small>StaticSubdomain1</small></h3>
+            @using (Html.BeginForm("Action4", "Home", link13, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action4", "Home", link13)</button>
+            }
+            <h3><small>StaticSubdomain2</small></h3>
+            @using (Html.BeginForm("Action1", "Home", new { }, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Action1")</button>
+            }
+            <h3><small>Normal MVC Routes</small></h3>
+            @using (Html.BeginForm("Index", "Home", new { }, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Index")</button>
+            }
+            @using (Html.BeginForm("Index", "Test", new { }, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Index", "Test")</button>
+            }
+            @using (Html.BeginForm("Action1", "Test", new { }, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @Html.TextBox("model", "model-value", new { @class = "form-control" })
+                    </div>
+                </div>
+                <button class="@bootstrapBtn" type="submit">Form to: @Url.Action("Index", "Test")</button>
+            }
+        </div>
+    </div>
+</div>

@@ -26,6 +26,12 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Action3(string parameter2, string id, string model)
+        {
+            return View(model: model);
+        }
         public IActionResult Action4(string id)
         {
             return View();
@@ -35,6 +41,10 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
             return View();
         }
         public IActionResult SubdomainsPage()
+        {
+            return View();
+        }
+        public IActionResult Forms()
         {
             return View();
         }

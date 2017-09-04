@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Microsoft.AspNetCore.Routing.Subdomain.Samples": {
+    "AspNetCoreSubdomain.Samples": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

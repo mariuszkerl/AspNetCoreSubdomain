@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Routing;
 
-namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
+namespace AspNetCoreSubdomain.Samples
 {
     public class Startup
     {

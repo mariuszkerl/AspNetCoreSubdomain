@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Microsoft.AspNetCore.Routing.Subdomain.Samples.Controllers
+namespace AspNetCoreSubdomain.Samples.Controllers
 {
     public class HomeController : Controller
     {

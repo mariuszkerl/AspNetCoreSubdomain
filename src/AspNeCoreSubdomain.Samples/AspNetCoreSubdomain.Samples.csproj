@@ -23,7 +23,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.AspNetCore.Routing.Subdomain\Microsoft.AspNetCore.Routing.Subdomain.csproj" />
+    <ProjectReference Include="..\AspNeCoreSubdomain\AspNetCoreSubdomain.csproj" />
   </ItemGroup>
 
 </Project>

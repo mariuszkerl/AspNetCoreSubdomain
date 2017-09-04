@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AspNetCore.Routing.Subdomain", "Microsoft.AspNetCore.Routing.Subdomain\Microsoft.AspNetCore.Routing.Subdomain.csproj", "{DB9BC0A9-320D-4B10-9D0F-5121C7C72915}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreSubdomain", "AspNeCoreSubdomain\AspNetCoreSubdomain.csproj", "{DB9BC0A9-320D-4B10-9D0F-5121C7C72915}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.AspNetCore.Routing.Subdomain.Samples", "Microsoft.AspNetCore.Routing.Subdomain.Samples\Microsoft.AspNetCore.Routing.Subdomain.Samples.csproj", "{0612CEBB-EE2E-40F5-99D0-13062041214E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreSubdomain.Samples", "AspNeCoreSubdomain.Samples\AspNetCoreSubdomain.Samples.csproj", "{0612CEBB-EE2E-40F5-99D0-13062041214E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

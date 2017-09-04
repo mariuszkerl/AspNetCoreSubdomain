@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Microsoft.AspNetCore.Routing.Subdomain.Samples
+namespace AspNetCoreSubdomain.Samples
 {
     public class Program
     {

@@ -1,3 +1,5 @@
+[![NuGet](https://img.shields.io/nuget/v/AspNetCoreSubdomain.svg)](https://www.nuget.org/packages/AspNetCoreSubdomain/)
+
 # ASP.NET Subdomain Routing
 Goal of that lib is to make subdomain routing easy to use in asp net core mvc applications. Normally you would use some custom route for some special case scenario in your app. This should solve most of issues while using subdomain routing. Inspired by couple of already existing libraries around the web which handle routing in some degree this should meet requirements:
 

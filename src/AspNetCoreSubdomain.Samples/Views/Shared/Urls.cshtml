@@ -14,6 +14,7 @@
     var link11 = new { id = "2" };
     var link12 = new { parameter1 = "subdomain1" };
     var link13 = new { parameter = "testparameter" };
+    var link14 = new { area = "area1", id = "1" };
 }
 <h2>Routes:</h2>
 <h3><small>ParameterSubdomain1</small></h3>
@@ -31,6 +32,8 @@
 @Html.ActionLink(Url.Action("Action2", "Test", link11), "Action2", "Test", link11, bootstrapBtn)
 <h3><small>ParameterSubdomain3</small></h3>
 @Html.ActionLink(Url.Action("Action2", link12), "Action2", link12, bootstrapBtn)
+<h3><small>ParameterSubdomain4</small></h3>
+@Html.ActionLink(Url.Action("Action1", "Test", link14), "Action1", "Test", link14, bootstrapBtn)
 <h3><small>StaticSubdomain1</small></h3>
 @Html.ActionLink(Url.Action("Action4", "Home", link13), "Action4", "Home", link13, bootstrapBtn)
 <h3><small>StaticSubdomain2</small></h3>

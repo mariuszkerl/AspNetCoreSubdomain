@@ -80,7 +80,7 @@ namespace AspNetCoreSubdomain.Samples
                     "SubdomainFormsPage",
                     "subdomain.forms.page",
                     "",
-                    new { controller = "Home", action = "SubdomainFormsPage" });
+                    new { controller = "Home", action = "SubdomainFormsPage" });           
 
                 routes.MapSubdomainRoute(
                     hostnames,
@@ -88,6 +88,12 @@ namespace AspNetCoreSubdomain.Samples
                     "{parameter2}",
                     "{id}",
                     new { controller = "Home", action = "Action3" });
+
+                routes.MapSubdomainRoute(
+                    hostnames,
+                    "ParameterSubdomain4",
+                    "{area}",
+                    "{controller}/{action}/{id}");
 
                 routes.MapSubdomainRoute(
                     hostnames,

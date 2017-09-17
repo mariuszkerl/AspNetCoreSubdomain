@@ -1,14 +1,11 @@
-using AspNetCoreSubdomain.SubdomainsAreaWebSite;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace RoutingWebSite
+namespace AspNetCoreSubdomain.SubdomainsAreaWebSite.Areas.Controllers
 {
+    [Area("Area1")]
     public class HomeController : Controller
     {
         private readonly SubdomainRoutingResponseGenerator _generator;
-
-        // We should not reach normal controller even if it exists
-        // without defined normal route.
 
         public HomeController(SubdomainRoutingResponseGenerator generator)
         {

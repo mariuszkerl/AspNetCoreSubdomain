@@ -17,7 +17,7 @@ namespace AspNetCoreSubdomain.SubdomainsAreaWebSite
         {
             if(!(urlHelperFactory is SubdomainUrlHelperFactory))
             {
-                throw new ArgumentException("UrlFactory is of wrong type. Please use AddSubdomains method in your startup class", "UrlFactory");
+                throw new ArgumentException("IUrlHelperFactory is of wrong type. Please use AddSubdomains method in your startup class", "urlHelperFactory");
             }
 
             _urlHelperFactory = urlHelperFactory;

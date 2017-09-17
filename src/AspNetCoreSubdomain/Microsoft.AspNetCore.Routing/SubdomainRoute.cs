@@ -54,6 +54,7 @@ namespace Microsoft.AspNetCore.Routing
             {
                 context.RouteData.Values.Add(ParameterNameFrom(Subdomain), subdomain);
             }
+            
             return base.RouteAsync(context);
         }
 
@@ -82,7 +83,7 @@ namespace Microsoft.AspNetCore.Routing
             }
 
             context.RouteData = routeData;
-
+            
             return base.OnRouteMatched(context);
         }
 

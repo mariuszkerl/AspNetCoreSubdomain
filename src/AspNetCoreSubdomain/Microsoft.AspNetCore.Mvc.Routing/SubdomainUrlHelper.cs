@@ -95,7 +95,6 @@ namespace Microsoft.AspNetCore.Mvc.Routing
             var pathData = GetVirtualPathData(routeContext.RouteName, valuesDictionary);
             if(pathData is AbsolutPathData)
             {
-                pathData = pathData as AbsolutPathData;
                 //we don't support changing protocol for subdomain
                 return GenerateUrl(((AbsolutPathData)pathData).Protocol, ((AbsolutPathData)pathData).Host, pathData, routeContext.Fragment);
             }

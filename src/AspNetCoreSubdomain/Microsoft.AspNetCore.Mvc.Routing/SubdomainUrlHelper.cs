@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 
-namespace Microsoft.AspNetCore.Routing.Subdomain.Microsoft.AspNetCore.Mvc.Routing
+namespace Microsoft.AspNetCore.Mvc.Routing
 {
     /// <summary>
     /// An implementation of <see cref="IUrlHelper"/> that contains methods to

@@ -91,6 +91,12 @@ namespace AspNetCoreSubdomain.Samples
 
                 routes.MapSubdomainRoute(
                     hostnames,
+                    "ParameterSubdomain4",
+                    "{area}",
+                    "{controller}/{action}/{id}");
+
+                routes.MapSubdomainRoute(
+                    hostnames,
                     "ParameterSubdomain2",
                     "{controller}",
                     "{action}/{id}",

@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 
-namespace Microsoft.AspNetCore.Routing.Subdomain.Microsoft.AspNetCore.Mvc.Routing
+namespace Microsoft.AspNetCore.Mvc.Routing
 {
     /// <summary>
     /// An implementation of <see cref="IUrlHelper"/> that contains methods to
@@ -63,13 +64,18 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Microsoft.AspNetCore.Mvc.Routin
             {
                 valuesDictionary["controller"] = actionContext.Controller;
             }
-
+            
             var pathData = GetVirtualPathData(routeName: null, values: valuesDictionary);
             if (pathData is AbsolutPathData)
             {
-                pathData = pathData as AbsolutPathData;
+                var absolutePathData = pathData as AbsolutPathData;
+
+                if (absolutePathData.Host == HttpContext.Request.Host.Value && absolutePathData.Protocol == HttpContext.Request.Scheme)
+                {
+                    return GenerateUrl(null, null, pathData, actionContext.Fragment);
+                }
                 //we don't support changing protocol for subdomain
-                return GenerateUrl(((AbsolutPathData)pathData).Protocol, ((AbsolutPathData)pathData).Host, pathData, actionContext.Fragment);
+                return GenerateUrl(absolutePathData.Protocol, absolutePathData.Host, pathData, actionContext.Fragment);
             }
             return GenerateUrl(actionContext.Protocol, actionContext.Host, pathData, actionContext.Fragment);
         }
@@ -94,7 +100,6 @@ namespace Microsoft.AspNetCore.Routing.Subdomain.Microsoft.AspNetCore.Mvc.Routin
             var pathData = GetVirtualPathData(routeContext.RouteName, valuesDictionary);
             if(pathData is AbsolutPathData)
             {
-                pathData = pathData as AbsolutPathData;
                 //we don't support changing protocol for subdomain
                 return GenerateUrl(((AbsolutPathData)pathData).Protocol, ((AbsolutPathData)pathData).Host, pathData, routeContext.Fragment);
             }

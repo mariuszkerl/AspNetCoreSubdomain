@@ -48,10 +48,13 @@ namespace Microsoft.AspNetCore.Routing
             }
 
             //that's for overriding default for subdomain
-            if (IsParameterName(Subdomain))
+            if (IsParameterName(Subdomain) && 
+                Defaults.ContainsKey(ParameterNameFrom(Subdomain)) &&
+                !context.RouteData.Values.ContainsKey(ParameterNameFrom(Subdomain)))
             {
                 context.RouteData.Values.Add(ParameterNameFrom(Subdomain), subdomain);
             }
+            
             return base.RouteAsync(context);
         }
 
@@ -65,14 +68,22 @@ namespace Microsoft.AspNetCore.Routing
             var subdomain = host.Substring(0, host.IndexOf(GetHostname(host)) - 1);
             var routeData = new RouteData(context.RouteData);
 
-            // this will allow to get value from example view via RouteData
-            if (IsParameterName(Subdomain) && !routeData.Values.ContainsKey(ParameterNameFrom(Subdomain)))
+            if (IsParameterName(Subdomain))
             {
-                routeData.Values.Add(ParameterNameFrom(Subdomain), subdomain);
+                //override default
+                if(Defaults.ContainsKey(ParameterNameFrom(Subdomain)) && routeData.Values.ContainsKey(ParameterNameFrom(Subdomain)))
+                {
+                    routeData.Values[ParameterNameFrom(Subdomain)] = subdomain;
+                }
+                //or add this which will allow to get value from example view via RouteData
+                else if(!routeData.Values.ContainsKey(ParameterNameFrom(Subdomain)))
+                {
+                    routeData.Values.Add(ParameterNameFrom(Subdomain), subdomain);
+                }
             }
 
             context.RouteData = routeData;
-
+            
             return base.OnRouteMatched(context);
         }
 

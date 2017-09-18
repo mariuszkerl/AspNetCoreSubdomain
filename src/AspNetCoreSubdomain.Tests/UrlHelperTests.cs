@@ -18,11 +18,16 @@ namespace AspNetCoreSubdomain.Tests
     public class UrlHelperTests
     {
         [Theory]
-        [InlineData("/", "area1", "Home", "Index", "http://area1.localhost/")]
-        [InlineData("/", "area1", "Home", "About", "http://area1.localhost/Home/About")]
-        [InlineData("/", "area1", "Test", "Index", "http://area1.localhost/Test")]
-        [InlineData("/", "area1", "Test", "About", "http://area1.localhost/Test/About")]
-        public void UrlHelperActionReturnsCorrectSubdomainUrl(
+        [InlineData("localhost", "/", "area1", "Home", "Index", "http://area1.localhost/")]
+        [InlineData("localhost", "/", "area1", "Home", "About", "http://area1.localhost/Home/About")]
+        [InlineData("localhost", "/", "area1", "Test", "Index", "http://area1.localhost/Test")]
+        [InlineData("localhost", "/", "area1", "Test", "About", "http://area1.localhost/Test/About")]
+        [InlineData("area1.localhost", "/", "area1", "Home", "Index", "/")]
+        [InlineData("area1.localhost", "/", "area1", "Home", "About", "/Home/About")]
+        [InlineData("area1.localhost", "/", "area1", "Test", "Index", "/Test")]
+        [InlineData("area1.localhost", "/", "area1", "Test", "About", "/Test/About")]
+        public void UrlHelperActionReturnsCorrectAreaSubdomainUrl(
+            string host,
             string appRoot,
             string subdomain,
             string controller,
@@ -47,7 +52,7 @@ namespace AspNetCoreSubdomain.Tests
                 },
             };
 
-            actionContext.HttpContext = CreateHttpContext(services, appRoot);
+            actionContext.HttpContext = CreateHttpContext(services, host, appRoot);
 
             actionContext.RouteData = new RouteData();
             actionContext.RouteData.Values.Add("action", action);
@@ -80,13 +85,14 @@ namespace AspNetCoreSubdomain.Tests
 
         private static HttpContext CreateHttpContext(
             IServiceProvider services,
+            string host,
             string appRoot)
         {
             var context = new DefaultHttpContext();
             context.RequestServices = services;
 
             context.Request.PathBase = new PathString(appRoot);
-            context.Request.Host = new HostString("localhost");
+            context.Request.Host = new HostString(host);
 
             return context;
         }

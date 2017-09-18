@@ -64,13 +64,18 @@ namespace Microsoft.AspNetCore.Mvc.Routing
             {
                 valuesDictionary["controller"] = actionContext.Controller;
             }
-
+            
             var pathData = GetVirtualPathData(routeName: null, values: valuesDictionary);
             if (pathData is AbsolutPathData)
             {
-                pathData = pathData as AbsolutPathData;
+                var absolutePathData = pathData as AbsolutPathData;
+
+                if (absolutePathData.Host == HttpContext.Request.Host.Value && absolutePathData.Protocol == HttpContext.Request.Scheme)
+                {
+                    return GenerateUrl(null, null, pathData, actionContext.Fragment);
+                }
                 //we don't support changing protocol for subdomain
-                return GenerateUrl(((AbsolutPathData)pathData).Protocol, ((AbsolutPathData)pathData).Host, pathData, actionContext.Fragment);
+                return GenerateUrl(absolutePathData.Protocol, absolutePathData.Host, pathData, actionContext.Fragment);
             }
             return GenerateUrl(actionContext.Protocol, actionContext.Host, pathData, actionContext.Fragment);
         }

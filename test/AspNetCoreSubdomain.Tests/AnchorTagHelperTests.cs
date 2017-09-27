@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestHelpers;
 using Xunit;
 
 namespace AspNetCoreSubdomain.Tests
@@ -29,14 +30,7 @@ namespace AspNetCoreSubdomain.Tests
     public class AnchorTagHelperTests
     {
         [Theory]
-        [InlineData("localhost", "/", "area1", "Home", "Index", "http://area1.localhost/")]
-        [InlineData("localhost", "/", "area1", "Home", "About", "http://area1.localhost/Home/About")]
-        [InlineData("localhost", "/", "area1", "Test", "Index", "http://area1.localhost/Test")]
-        [InlineData("localhost", "/", "area1", "Test", "About", "http://area1.localhost/Test/About")]
-        [InlineData("area1.localhost", "/", "area1", "Home", "Index", "/")]
-        [InlineData("area1.localhost", "/", "area1", "Home", "About", "/Home/About")]
-        [InlineData("area1.localhost", "/", "area1", "Test", "Index", "/Test")]
-        [InlineData("area1.localhost", "/", "area1", "Test", "About", "/Test/About")]
+        [MemberData(nameof(MemberDataFactories.AreaSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaSubdomainTestData))]
         async public void CanCreateSubdomainAreaTagHelper(
             string host,
             string appRoot,
@@ -46,25 +40,16 @@ namespace AspNetCoreSubdomain.Tests
             string expectedUrl)
         {
             // Arrange
-            var services = CreateServices();
-            var routeBuilder = CreateRouteBuilder(services);
-
+            var services = ConfigurationFactories.ServiceProviderFacotry.Get();
+            var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
+            var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
             routeBuilder.MapSubdomainRoute(
                 new[] { "localhost" },
                 "default",
                 "{area}",
                 "{controller=Home}/{action=Index}");
 
-            var actionContext = new ActionContext()
-            {
-                HttpContext = new DefaultHttpContext()
-                {
-                    RequestServices = services,
-                },
-                ActionDescriptor = new ActionDescriptor()
-            };
-
-            actionContext.HttpContext = CreateHttpContext(services, host, appRoot);
+            var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
 
             actionContext.RouteData = new RouteData();
             actionContext.RouteData.Values.Add("action", action);
@@ -104,70 +89,6 @@ namespace AspNetCoreSubdomain.Tests
             Assert.Equal(1, output.Attributes.Count);
             Assert.Equal("href", output.Attributes.First().Name);
             Assert.Equal(expectedUrl, output.Attributes.First().Value);
-        }
-
-        private static IServiceProvider CreateServices()
-        {
-            var services = new ServiceCollection();
-            services.AddOptions();
-            services.AddLogging();
-            services.AddRouting();
-            services
-                //exceptitons are thrown without ObjectPoolProvider
-                .AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-
-            return services.BuildServiceProvider();
-        }
-
-        private static HttpContext CreateHttpContext(
-            IServiceProvider services,
-            string host,
-            string appRoot)
-        {
-            var context = new DefaultHttpContext();
-            context.RequestServices = services;
-
-            context.Request.PathBase = new PathString(appRoot);
-            context.Request.Host = new HostString(host);
-
-            return context;
-        }
-
-        private static ActionContext CreateActionContext(HttpContext context, IRouter router)
-        {
-            var routeData = new RouteData();
-            routeData.Routers.Add(router);
-
-            return new ActionContext(context, routeData, new ActionDescriptor());
-        }
-
-        private static IRouteBuilder CreateRouteBuilder(IServiceProvider services)
-        {
-            var app = new Mock<IApplicationBuilder>();
-            app
-                .SetupGet(a => a.ApplicationServices)
-                .Returns(services);
-
-            return new RouteBuilder(app.Object)
-            {
-                //That's needed for route mappings. It cannot be empty for constructor,
-                //will just pass requests further
-                DefaultHandler = new DefaultRouter(),
-            };
-        }
-
-        private class DefaultRouter : IRouter
-        {
-            public VirtualPathData GetVirtualPath(VirtualPathContext context)
-            {
-                return null;
-            }
-
-            public Task RouteAsync(RouteContext context)
-            {
-                context.Handler = (c) => Task.FromResult(0);
-                return Task.FromResult(false);
-            }
         }
 
         private static IOptions<MvcViewOptions> GetOptions()

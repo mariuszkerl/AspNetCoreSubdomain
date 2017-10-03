@@ -69,8 +69,8 @@ namespace Microsoft.AspNetCore.Mvc.Routing
             if (pathData is AbsolutPathData)
             {
                 var absolutePathData = pathData as AbsolutPathData;
-
-                if (absolutePathData.Host == HttpContext.Request.Host.Value && absolutePathData.Protocol == HttpContext.Request.Scheme)
+                
+                if (string.Equals(absolutePathData.Host, HttpContext.Request.Host.Value, StringComparison.CurrentCultureIgnoreCase) && absolutePathData.Protocol == HttpContext.Request.Scheme)
                 {
                     return GenerateUrl(null, null, pathData, actionContext.Fragment);
                 }

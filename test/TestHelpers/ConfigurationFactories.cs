@@ -2,12 +2,18 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Moq;
 using System;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using System.IO;
+using Microsoft.Extensions.Options;
 
 namespace TestHelpers
 {
@@ -65,9 +71,22 @@ namespace TestHelpers
             }
         }
 
+        public static class OptionsFactory
+        {
+            public static IOptions<MvcViewOptions> GetMvcViewOptions()
+            {
+                var mockOptions = new Mock<IOptions<MvcViewOptions>>();
+                mockOptions
+                    .SetupGet(options => options.Value)
+                    .Returns(new MvcViewOptions());
+
+                return mockOptions.Object;
+            }
+        }
+
         public static class ServiceProviderFacotry
         {
-           public static IServiceProvider Get()
+            public static IServiceProvider Get()
             {
                 var services = new ServiceCollection();
                 services.AddOptions();
@@ -78,6 +97,31 @@ namespace TestHelpers
                     .AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
 
                 return services.BuildServiceProvider();
+            }
+        }
+
+        public static class ViewContextFactory
+        {
+            public static ViewContext Get(
+            ActionContext actionContext,
+            object model,
+            IHtmlGenerator htmlGenerator,
+            IModelMetadataProvider metadataProvider,
+            ModelStateDictionary modelState)
+            {
+                var viewData = new ViewDataDictionary(metadataProvider, modelState)
+                {
+                    Model = model,
+                };
+                var viewContext = new ViewContext(
+                    actionContext,
+                    Mock.Of<IView>(),
+                    viewData,
+                    Mock.Of<ITempDataDictionary>(),
+                    TextWriter.Null,
+                    new HtmlHelperOptions());
+
+                return viewContext;
             }
         }
     }

@@ -30,8 +30,8 @@ namespace AspNetCoreSubdomain.Tests
     public class AnchorTagHelperTests
     {
         [Theory]
-        [MemberData(nameof(MemberDataFactories.AreaSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaSubdomainTestData))]
-        async public void CanCreateSubdomainAreaTagHelper(
+        [MemberData(nameof(MemberDataFactories.AreaInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaInSubdomainTestData))]
+        async public void CanCreateAreaInSubdomainAnchorTagHelper(
             string host,
             string appRoot,
             string subdomain,
@@ -43,6 +43,8 @@ namespace AspNetCoreSubdomain.Tests
             var services = ConfigurationFactories.ServiceProviderFacotry.Get();
             var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
             var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
+            var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
+
             routeBuilder.MapSubdomainRoute(
                 new[] { "localhost" },
                 "default",
@@ -58,10 +60,10 @@ namespace AspNetCoreSubdomain.Tests
             actionContext.RouteData.Routers.Add(routeBuilder.Build());
             
             var metadataProvider = new EmptyModelMetadataProvider();
-            var htmlGenerator = new DefaultHtmlGenerator(Mock.Of<IAntiforgery>(), GetOptions(), metadataProvider, new SubdomainUrlHelperFactory(), new HtmlTestEncoder(), new ClientValidatorCache(), new DefaultValidationHtmlAttributeProvider(GetOptions(), metadataProvider, new ClientValidatorCache()));
+            var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
             var helper = new Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper(htmlGenerator)
             {
-                ViewContext = GetViewContext(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
+                ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
                 Action = action,
                 Controller = controller,
                 Host = host,
@@ -91,36 +93,126 @@ namespace AspNetCoreSubdomain.Tests
             Assert.Equal(expectedUrl, output.Attributes.First().Value);
         }
 
-        private static IOptions<MvcViewOptions> GetOptions()
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
+        async public void CanCreateControllerInSubdomainAnchorTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string action,
+            string expectedUrl)
         {
-            var mockOptions = new Mock<IOptions<MvcViewOptions>>();
-            mockOptions
-                .SetupGet(options => options.Value)
-                .Returns(new MvcViewOptions());
+            // Arrange
+            var services = ConfigurationFactories.ServiceProviderFacotry.Get();
+            var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
+            var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
+            var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
+            
+            routeBuilder.MapSubdomainRoute(
+                new[] { "localhost" },
+                "default",
+                "{controller}",
+                "{action=Index}");
 
-            return mockOptions.Object;
-        }
+            var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
 
-        ViewContext GetViewContext(
-            ActionContext actionContext,
-            object model,
-            IHtmlGenerator htmlGenerator,
-            IModelMetadataProvider metadataProvider,
-            ModelStateDictionary modelState)
-        {
-            var viewData = new ViewDataDictionary(metadataProvider, modelState)
+            actionContext.RouteData = new RouteData();
+            actionContext.RouteData.Values.Add("action", action);
+            actionContext.RouteData.Values.Add("controller", subdomain);
+            actionContext.RouteData.Routers.Add(routeBuilder.Build());
+            
+            var metadataProvider = new EmptyModelMetadataProvider();
+            var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
+            var helper = new Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper(htmlGenerator)
             {
-                Model = model,
+                ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
+                Action = action,
+                Controller = subdomain,
+                Host = host
             };
-            var viewContext = new ViewContext(
-                actionContext,
-                Mock.Of<IView>(),
-                viewData,
-                Mock.Of<ITempDataDictionary>(),
-                TextWriter.Null,
-                new HtmlHelperOptions());
+            var context = new TagHelperContext(
+               allAttributes: new TagHelperAttributeList(
+                   new[] { new TagHelperAttribute("a") }),
+               items: new Dictionary<object, object>(),
+               uniqueId: "test-id");
+            var output = new TagHelperOutput(
+                "a",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
 
-            return viewContext;
+            //Act
+            helper.Process(context, output);
+
+            //Assert
+            Assert.Empty(output.Content.GetContent());
+            Assert.Equal(1, output.Attributes.Count);
+            Assert.Equal("href", output.Attributes.First().Name);
+            Assert.Equal(expectedUrl, output.Attributes.First().Value);
+        }
+        
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ConstantSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstantSubdomainTestData))]
+        async public void CanCreateConstantSubdomainAnchorTagHelper(
+            string host,
+            string appRoot,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            var services = ConfigurationFactories.ServiceProviderFacotry.Get();
+            var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
+            var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
+            var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
+
+            routeBuilder.MapSubdomainRoute(
+                new[] { "localhost" },
+                "default",
+                "constantsubdomain",
+                "{controller=Home}/{action=Index}");
+
+            var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
+
+            actionContext.RouteData = new RouteData();
+            actionContext.RouteData.Values.Add("action", action);
+            actionContext.RouteData.Values.Add("controller", controller);
+            actionContext.RouteData.Routers.Add(routeBuilder.Build());
+            
+            var metadataProvider = new EmptyModelMetadataProvider();
+            var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
+            var helper = new Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper(htmlGenerator)
+            {
+                ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
+                Action = action,
+                Controller = controller,
+                Host = host
+            };
+            var context = new TagHelperContext(
+               allAttributes: new TagHelperAttributeList(
+                   new[] { new TagHelperAttribute("a") }),
+               items: new Dictionary<object, object>(),
+               uniqueId: "test-id");
+            var output = new TagHelperOutput(
+                "a",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            //Act
+            helper.Process(context, output);
+
+            //Assert
+            Assert.Empty(output.Content.GetContent());
+            Assert.Equal(1, output.Attributes.Count);
+            Assert.Equal("href", output.Attributes.First().Name);
+            Assert.Equal(expectedUrl, output.Attributes.First().Value);
         }
     }
 }

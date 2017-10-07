@@ -67,7 +67,7 @@ For samples definitely look at ```Samples``` project. For running it you have to
 ### C:\Windows\System32\drivers\etc\hosts
 ```
     127.0.0.1   subdomain1.localhost
-    127.0.0.1   subdomain2.localhsot
+    127.0.0.1   subdomain2.localhost
     127.0.0.1   subdomain3.localhost
     127.0.0.1   home.localhost
     127.0.0.1   test.localhost

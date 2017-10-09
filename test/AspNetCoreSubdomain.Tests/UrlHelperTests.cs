@@ -40,12 +40,7 @@ namespace AspNetCoreSubdomain.Tests
                 "default",
                 "{area}",
                 "{controller=Home}/{action=Index}");
-
-            actionContext.RouteData = new RouteData();
-            actionContext.RouteData.Values.Add("action", action);
-            actionContext.RouteData.Values.Add("controller", controller);
-            actionContext.RouteData.Values.Add("area", subdomain);
-            actionContext.RouteData.Routers.Add(routeBuilder.Build());
+            ActionContextVisitor.Visit(actionContext, routeBuilder, action, controller, subdomain);
 
             //Act
             var url = urlHelper.Action(action, controller, new { area = subdomain });
@@ -76,10 +71,7 @@ namespace AspNetCoreSubdomain.Tests
                 "{controller}",
                 "{action=Index}");
 
-            actionContext.RouteData = new RouteData();
-            actionContext.RouteData.Values.Add("action", action);
-            actionContext.RouteData.Values.Add("controller", subdomain);
-            actionContext.RouteData.Routers.Add(routeBuilder.Build());
+            ActionContextVisitor.Visit(actionContext, routeBuilder, action, subdomain, null);
 
             //Act
             var url = urlHelper.Action(action, subdomain);
@@ -109,11 +101,7 @@ namespace AspNetCoreSubdomain.Tests
                 "default",
                 "constantsubdomain",
                 "{controller=Home}/{action=Index}");
-
-            actionContext.RouteData = new RouteData();
-            actionContext.RouteData.Values.Add("action", action);
-            actionContext.RouteData.Values.Add("controller", controller);
-            actionContext.RouteData.Routers.Add(routeBuilder.Build());
+            ActionContextVisitor.Visit(actionContext, routeBuilder, action, controller, null);
 
             //Act
             var url = urlHelper.Action(action, controller);

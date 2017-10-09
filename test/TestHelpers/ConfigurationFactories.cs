@@ -17,6 +17,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.WebEncoders.Testing;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace TestHelpers
 {
@@ -147,15 +150,7 @@ namespace TestHelpers
                 mapRoute(routeBuilder);
 
                 var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
-
-                actionContext.RouteData = new RouteData();
-                actionContext.RouteData.Values.Add(nameof(action), action);
-                actionContext.RouteData.Values.Add(nameof(controller), controller);
-                if (area != null)
-                {
-                    actionContext.RouteData.Values.Add(nameof(area), area);
-                }
-                actionContext.RouteData.Routers.Add(routeBuilder.Build());
+                ActionContextVisitor.Visit(actionContext, routeBuilder, action, controller, area);
 
                 var metadataProvider = new EmptyModelMetadataProvider();
                 var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
@@ -164,6 +159,115 @@ namespace TestHelpers
                 //must call Contextualize before using htmlHelper instance
                 htmlHelper.Contextualize(ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()));
                 return htmlHelper;
+            }
+        }
+
+        public static class TagHelperFactory
+        {
+            public static TagHelper GetAnchor(
+                Action<IRouteBuilder> mapRoute,
+                string host,
+                string appRoot,
+                string controller,
+                string action,
+                string area,
+                string expectedUrl)
+            {
+                var services = ConfigurationFactories.ServiceProviderFacotry.Get();
+                var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
+                var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
+                var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
+
+                mapRoute(routeBuilder);
+
+                var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
+                ActionContextVisitor.Visit(actionContext, routeBuilder, action, controller, area);
+
+                var metadataProvider = new EmptyModelMetadataProvider();
+                var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
+                var tagHelper = new Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper(htmlGenerator)
+                {
+                    ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
+                    Action = action,
+                    Controller = controller,
+                    Host = host
+                };
+
+                if (area != null)
+                {
+                    tagHelper.Area = area;
+                }
+
+                return tagHelper;
+            }
+            public static TagHelper GetForm(
+                Action<IRouteBuilder> mapRoute,
+                string host,
+                string appRoot,
+                string controller,
+                string action,
+                string area,
+                string expectedUrl)
+            {
+                var services = ConfigurationFactories.ServiceProviderFacotry.Get();
+                var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
+                var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
+                var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
+
+                mapRoute(routeBuilder);
+
+                var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
+                ActionContextVisitor.Visit(actionContext, routeBuilder, action, controller, area);
+
+                var metadataProvider = new EmptyModelMetadataProvider();
+                var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
+                var tagHelper = new Microsoft.AspNetCore.Mvc.TagHelpers.FormTagHelper(htmlGenerator)
+                {
+                    ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
+                    Action = action,
+                    Controller = controller,
+                    Antiforgery = false
+                };
+
+                if (area != null)
+                {
+                    tagHelper.Area = area;
+                }
+
+                return tagHelper;
+            }
+        }
+
+        public static class TagHelperContextFactory
+        {
+            public static TagHelperContext Get()
+            {
+                return new TagHelperContext(
+                     allAttributes: new TagHelperAttributeList(),
+                     items: new Dictionary<object, object>(),
+                     uniqueId: "test-id");
+            }
+        }
+        public static class TagHelperOutputFactory
+        {
+            public static TagHelperOutput GetAnchor()
+            {
+                return GetOutput("a");
+            }
+            public static TagHelperOutput GetForm()
+            {
+                return GetOutput("form");
+            }
+            private static TagHelperOutput GetOutput(string tagName)
+            {
+                return new TagHelperOutput(
+                    tagName,
+                    attributes: new TagHelperAttributeList(),
+                    getChildContentAsync: (useCachedResult, encoder) =>
+                    {
+                        var tagHelperContent = new DefaultTagHelperContent();
+                        return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    });
             }
         }
     }

@@ -28,54 +28,20 @@ public class FormTagHelperTests
             string expectedUrl)
     {
         // Arrange
-        var services = ConfigurationFactories.ServiceProviderFacotry.Get();
-        var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
-        var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
-        var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
-
-        routeBuilder.MapSubdomainRoute(
-            new[] { "localhost" },
-            "default",
-            "{area}",
-            "{controller=Home}/{action=Index}");
-
-        var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
-
-        actionContext.RouteData = new RouteData();
-        actionContext.RouteData.Values.Add("action", action);
-        actionContext.RouteData.Values.Add("controller", controller);
-        actionContext.RouteData.Values.Add("area", subdomain);
-        actionContext.RouteData.Routers.Add(routeBuilder.Build());
-
-        var metadataProvider = new EmptyModelMetadataProvider();
-        var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
-        var helper = new Microsoft.AspNetCore.Mvc.TagHelpers.FormTagHelper(htmlGenerator)
+        var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
         {
-            ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
-            Action = action,
-            Controller = controller,
-            Area = subdomain,
-            Antiforgery = false
-        };
-        var context = new TagHelperContext(
-           allAttributes: new TagHelperAttributeList(
-               new[] {
-               new TagHelperAttribute("asp-action", action),
-               new TagHelperAttribute("asp-controller", controller),
-               new TagHelperAttribute("asp-area", subdomain) }),
-           items: new Dictionary<object, object>(),
-           uniqueId: "test-id");
-        var output = new TagHelperOutput(
-            "form",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            routeBuilder.MapSubdomainRoute(
+                new[] { "localhost" },
+                "default",
+                "{area}",
+                "{controller=Home}/{action=Index}");
+        }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+        var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();
 
         //Act
-        helper.Process(context, output);
+        helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+            output);
 
         //Assert
         Assert.Empty(output.Content.GetContent());
@@ -92,51 +58,19 @@ public class FormTagHelperTests
         string expectedUrl)
     {
         // Arrange
-        var services = ConfigurationFactories.ServiceProviderFacotry.Get();
-        var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
-        var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
-        var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
-
-        routeBuilder.MapSubdomainRoute(
-            new[] { "localhost" },
-            "default",
-            "{controller}",
-            "{action=Index}");
-
-        var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
-
-        actionContext.RouteData = new RouteData();
-        actionContext.RouteData.Values.Add("action", action);
-        actionContext.RouteData.Values.Add("controller", subdomain);
-        actionContext.RouteData.Routers.Add(routeBuilder.Build());
-
-        var metadataProvider = new EmptyModelMetadataProvider();
-        var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
-        var helper = new Microsoft.AspNetCore.Mvc.TagHelpers.FormTagHelper(htmlGenerator)
+        var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
         {
-            ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
-            Action = action,
-            Controller = subdomain,
-            Antiforgery = false
-        };
-        var context = new TagHelperContext(
-           allAttributes: new TagHelperAttributeList(
-               new[] {
-               new TagHelperAttribute("asp-action", action),
-               new TagHelperAttribute("asp-controller", subdomain) }),
-           items: new Dictionary<object, object>(),
-           uniqueId: "test-id");
-        var output = new TagHelperOutput(
-            "form",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            routeBuilder.MapSubdomainRoute(
+                new[] { "localhost" },
+                "default",
+                "{controller}",
+                "{action=Index}");
+        }, host, appRoot, subdomain, action, null, expectedUrl);
+        var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();
 
         //Act
-        helper.Process(context, output);
+        helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+            output);
 
         //Assert
         Assert.Empty(output.Content.GetContent());
@@ -153,54 +87,22 @@ public class FormTagHelperTests
         string expectedUrl)
     {
         // Arrange
-        var services = ConfigurationFactories.ServiceProviderFacotry.Get();
-        var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
-        var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
-        var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
-
-        routeBuilder.MapSubdomainRoute(
-            new[] { "localhost" },
-            "default",
-            "constantsubdomain",
-            "{controller=Home}/{action=Index}");
-
-        var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
-
-        actionContext.RouteData = new RouteData();
-        actionContext.RouteData.Values.Add("action", action);
-        actionContext.RouteData.Values.Add("controller", controller);
-        actionContext.RouteData.Routers.Add(routeBuilder.Build());
-
-        var metadataProvider = new EmptyModelMetadataProvider();
-        var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
-        var helper = new Microsoft.AspNetCore.Mvc.TagHelpers.FormTagHelper(htmlGenerator)
+        var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
         {
-            ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
-            Action = action,
-            Controller = controller,
-            Antiforgery = false
-        };
-        var context = new TagHelperContext(
-           allAttributes: new TagHelperAttributeList(
-               new[] {
-               new TagHelperAttribute("asp-action", action),
-               new TagHelperAttribute("asp-controller", controller) }),
-           items: new Dictionary<object, object>(),
-           uniqueId: "test-id");
-        var output = new TagHelperOutput(
-            "form",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            routeBuilder.MapSubdomainRoute(
+                new[] { "localhost" },
+                "default",
+                "constantsubdomain",
+                "{controller=Home}/{action=Index}");
+        }, host, appRoot, controller, action, null, expectedUrl);
+
+        var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();
 
         //Act
-        helper.Process(context, output);
+        helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+            output);
 
         //Assert
-
         Assert.Empty(output.Content.GetContent());
         Assert.Equal(expectedUrl, output.Attributes["action"].Value);
     }

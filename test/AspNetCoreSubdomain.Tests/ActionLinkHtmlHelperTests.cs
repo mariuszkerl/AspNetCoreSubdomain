@@ -62,6 +62,7 @@ namespace AspNetCoreSubdomain.Tests
             // Assert
             Assert.Equal(expectedLink, resultHtml);
         }
+        
         [Theory]
         [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
         public void CanCreateControllerSubdomainActionLinkHtmlHelper(

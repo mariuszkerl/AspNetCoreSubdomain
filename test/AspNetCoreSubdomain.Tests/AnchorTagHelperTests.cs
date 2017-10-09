@@ -31,7 +31,7 @@ namespace AspNetCoreSubdomain.Tests
     {
         [Theory]
         [MemberData(nameof(MemberDataFactories.AreaInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaInSubdomainTestData))]
-        async public void CanCreateAreaInSubdomainAnchorTagHelper(
+        public void CanCreateAreaInSubdomainAnchorTagHelper(
             string host,
             string appRoot,
             string subdomain,
@@ -95,7 +95,7 @@ namespace AspNetCoreSubdomain.Tests
 
         [Theory]
         [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
-        async public void CanCreateControllerInSubdomainAnchorTagHelper(
+        public void CanCreateControllerInSubdomainAnchorTagHelper(
             string host,
             string appRoot,
             string subdomain,
@@ -156,7 +156,7 @@ namespace AspNetCoreSubdomain.Tests
         
         [Theory]
         [MemberData(nameof(MemberDataFactories.ConstantSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstantSubdomainTestData))]
-        async public void CanCreateConstantSubdomainAnchorTagHelper(
+        public void CanCreateConstantSubdomainAnchorTagHelper(
             string host,
             string appRoot,
             string controller,

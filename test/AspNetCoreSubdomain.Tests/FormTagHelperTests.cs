@@ -19,7 +19,7 @@ public class FormTagHelperTests
 {
     [Theory]
     [MemberData(nameof(MemberDataFactories.AreaInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaInSubdomainTestData))]
-    async public void CanCreateAreaInSubdomainFormTagHelper(
+    public void CanCreateAreaInSubdomainFormTagHelper(
             string host,
             string appRoot,
             string subdomain,
@@ -84,7 +84,7 @@ public class FormTagHelperTests
 
     [Theory]
     [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
-    async public void CanCreateControllerInSubdomainFormTagHelper(
+    public void CanCreateControllerInSubdomainFormTagHelper(
         string host,
         string appRoot,
         string subdomain,
@@ -145,7 +145,7 @@ public class FormTagHelperTests
 
     [Theory]
     [MemberData(nameof(MemberDataFactories.ConstantSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstantSubdomainTestData))]
-    async public void CanCreateConstantSubdomainFormTagHelper(
+    public void CanCreateConstantSubdomainFormTagHelper(
         string host,
         string appRoot,
         string controller,

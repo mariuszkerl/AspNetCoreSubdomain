@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.IO;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.WebEncoders.Testing;
 
 namespace TestHelpers
 {
@@ -122,6 +125,45 @@ namespace TestHelpers
                     new HtmlHelperOptions());
 
                 return viewContext;
+            }
+        }
+
+        public static class HtmlHelperFactory
+        {
+            public static HtmlHelper Get(
+            Action<IRouteBuilder> mapRoute,
+            string host,
+            string appRoot,
+            string controller,
+            string action,
+            string area,
+            string expectedUrl)
+            {
+                var services = ConfigurationFactories.ServiceProviderFacotry.Get();
+                var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
+                var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
+                var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
+
+                mapRoute(routeBuilder);
+
+                var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
+
+                actionContext.RouteData = new RouteData();
+                actionContext.RouteData.Values.Add(nameof(action), action);
+                actionContext.RouteData.Values.Add(nameof(controller), controller);
+                if (area != null)
+                {
+                    actionContext.RouteData.Values.Add(nameof(area), area);
+                }
+                actionContext.RouteData.Routers.Add(routeBuilder.Build());
+
+                var metadataProvider = new EmptyModelMetadataProvider();
+                var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
+                var htmlHelper = new HtmlHelper(htmlGenerator, Mock.Of<ICompositeViewEngine>(), metadataProvider, Mock.Of<IViewBufferScope>(), new HtmlTestEncoder(), UrlTestEncoder.Default);
+
+                //must call Contextualize before using htmlHelper instance
+                htmlHelper.Contextualize(ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()));
+                return htmlHelper;
             }
         }
     }

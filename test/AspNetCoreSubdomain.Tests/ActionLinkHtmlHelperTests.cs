@@ -27,8 +27,79 @@ namespace AspNetCoreSubdomain.Tests
     public class ActionLinkHtmlHelperTests
     {
         [Theory]
-        [MemberData(nameof(MemberDataFactories.ConstantSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstantSubdomainTestData))]
-        public void CanCreateConstantSubdomainAnchorTagHelper(
+        [MemberData(nameof(MemberDataFactories.AreaInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaInSubdomainTestData))]
+        public void CanCreateAreaSubdomainActionLinkHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedLink = $"<a href=\"HtmlEncode[[{expectedUrl}]]\">HtmlEncode[[Test]]</a>";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "localhost" },
+                    "default",
+                    "{area}",
+                    "{controller=Home}/{action=Index}");
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+            // Act
+            var actualLink = htmlHelper.ActionLink(
+                                            linkText: "Test",
+                                            actionName: action,
+                                            controllerName: controller,
+                                            routeValues: new { area = subdomain });
+            string resultHtml;
+            using (var writer = new StringWriter())
+            {
+                actualLink.WriteTo(writer, new HtmlTestEncoder());
+                resultHtml = writer.ToString();
+            }
+
+            // Assert
+            Assert.Equal(expectedLink, resultHtml);
+        }
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
+        public void CanCreateControllerSubdomainActionLinkHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedLink = $"<a href=\"HtmlEncode[[{expectedUrl}]]\">HtmlEncode[[Test]]</a>";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "localhost" },
+                    "default",
+                    "{controller}",
+                    "{action=Index}");
+            }, host, appRoot, subdomain, action, null, expectedUrl);
+            // Act
+            var actualLink = htmlHelper.ActionLink(
+                                            linkText: "Test",
+                                            actionName: action,
+                                            controllerName: subdomain);
+            string resultHtml;
+            using (var writer = new StringWriter())
+            {
+                actualLink.WriteTo(writer, new HtmlTestEncoder());
+                resultHtml = writer.ToString();
+            }
+
+            // Assert
+            Assert.Equal(expectedLink, resultHtml);
+        }
+
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
+        public void CanCreateConstantActionLinkHtmlHelper(
             string host,
             string appRoot,
             string controller,
@@ -37,31 +108,14 @@ namespace AspNetCoreSubdomain.Tests
         {
             // Arrange
             string expectedLink = $"<a href=\"HtmlEncode[[{expectedUrl}]]\">HtmlEncode[[Test]]</a>";
-            var services = ConfigurationFactories.ServiceProviderFacotry.Get();
-            var routeBuilder = ConfigurationFactories.RouteBuilderFactory.Get(services);
-            var httpContext = ConfigurationFactories.HttpContextFactory.Get(services, host, appRoot);
-            var mvcViewOptions = ConfigurationFactories.OptionsFactory.GetMvcViewOptions();
-
-            routeBuilder.MapSubdomainRoute(
-                new[] { "localhost" },
-                "default",
-                "constantsubdomain",
-                "{controller=Home}/{action=Index}");
-
-            var actionContext = ConfigurationFactories.ActionContextFactory.Get(httpContext, new ActionDescriptor());
-
-            actionContext.RouteData = new RouteData();
-            actionContext.RouteData.Values.Add("action", action);
-            actionContext.RouteData.Values.Add("controller", controller);
-            actionContext.RouteData.Routers.Add(routeBuilder.Build());
-
-            var metadataProvider = new EmptyModelMetadataProvider();
-            var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
-            var htmlHelper = new HtmlHelper(htmlGenerator, Mock.Of<ICompositeViewEngine>(), metadataProvider, Mock.Of<IViewBufferScope>(), new HtmlTestEncoder(), UrlTestEncoder.Default);
-
-            //must call Contextualize before using htmlHelper instance
-            htmlHelper.Contextualize(ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()));
-
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "localhost" },
+                    "default",
+                    "constantsubdomain",
+                    "{controller=Home}/{action=Index}");
+            }, host, appRoot, controller, action, null, expectedUrl);
             // Act
             var actualLink = htmlHelper.ActionLink(
                                             linkText: "Test",

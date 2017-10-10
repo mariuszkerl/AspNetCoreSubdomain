@@ -1,3 +1,5 @@
+<img src="https://loled.blob.core.windows.net/images/subdomain-thumb.png" alt="logo" />
+
 [![NuGet](https://img.shields.io/nuget/v/AspNetCoreSubdomain.svg)](https://www.nuget.org/packages/AspNetCoreSubdomain/)
 
 # ASP.NET Subdomain Routing

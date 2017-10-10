@@ -111,7 +111,6 @@ namespace TestHelpers
             public static ViewContext Get(
             ActionContext actionContext,
             object model,
-            IHtmlGenerator htmlGenerator,
             IModelMetadataProvider metadataProvider,
             ModelStateDictionary modelState)
             {
@@ -124,7 +123,7 @@ namespace TestHelpers
                     Mock.Of<IView>(),
                     viewData,
                     Mock.Of<ITempDataDictionary>(),
-                    TextWriter.Null,
+                    new StringWriter(),
                     new HtmlHelperOptions());
 
                 return viewContext;
@@ -157,7 +156,7 @@ namespace TestHelpers
                 var htmlHelper = new HtmlHelper(htmlGenerator, Mock.Of<ICompositeViewEngine>(), metadataProvider, Mock.Of<IViewBufferScope>(), new HtmlTestEncoder(), UrlTestEncoder.Default);
 
                 //must call Contextualize before using htmlHelper instance
-                htmlHelper.Contextualize(ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()));
+                htmlHelper.Contextualize(ConfigurationFactories.ViewContextFactory.Get(actionContext, null, metadataProvider, new ModelStateDictionary()));
                 return htmlHelper;
             }
         }
@@ -187,7 +186,7 @@ namespace TestHelpers
                 var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
                 var tagHelper = new Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper(htmlGenerator)
                 {
-                    ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
+                    ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, metadataProvider, new ModelStateDictionary()),
                     Action = action,
                     Controller = controller,
                     Host = host
@@ -223,7 +222,7 @@ namespace TestHelpers
                 var htmlGenerator = new TestHtmlGenerator(metadataProvider, mvcViewOptions, new SubdomainUrlHelperFactory());
                 var tagHelper = new Microsoft.AspNetCore.Mvc.TagHelpers.FormTagHelper(htmlGenerator)
                 {
-                    ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, htmlGenerator, metadataProvider, new ModelStateDictionary()),
+                    ViewContext = ConfigurationFactories.ViewContextFactory.Get(actionContext, null, metadataProvider, new ModelStateDictionary()),
                     Action = action,
                     Controller = controller,
                     Antiforgery = false

@@ -12,8 +12,6 @@ namespace AspNetCoreSubdomain.FunctionalTests
 {
     public class UnitTest1
     {
-        // Normal Route - route without subdomain
-
         private HttpClient _client { get; }
 
         private TestServer _server { get; set; }

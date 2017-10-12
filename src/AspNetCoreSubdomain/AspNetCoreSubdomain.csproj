@@ -2,15 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
-    <Version>0.3.1</Version>
+    <Version>0.4.0</Version>
     <Authors>Mariusz Kerl</Authors>
     <Company />
     <Description>Create subdomain routes like default route semantics, build subdomain links with helpers.</Description>
     <PackageTags>web mvc aspnet core routing subdomain</PackageTags>
-    <PackageReleaseNotes>Area can be used as a parameter in subdomain
-Url is now generated correctly when url route values will point to the same subdomain which host is on
-Fixed subdomain route sometimes breaking while route value was already present
-</PackageReleaseNotes>
+    <PackageReleaseNotes>
+    Html Helpers: BeginForm, ActionLink have been tested
+    Tag Helpers: Form, Anchor have been tested
+    Fixed issue generating subdomain link for current host which sometimes was generating absolut path.
+    </PackageReleaseNotes>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
     <Copyright>Mariusz Kerl</Copyright>

@@ -99,7 +99,7 @@ namespace AspNetCoreSubdomain.Tests
         }
 
         [Theory]
-        [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
+        [MemberData(nameof(MemberDataFactories.ConstantSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstantSubdomainTestData))]
         public void CanCreateConstantActionLinkHtmlHelper(
             string host,
             string appRoot,

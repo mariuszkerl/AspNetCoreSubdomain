@@ -9,6 +9,11 @@ Goal of that lib is to make subdomain routing easy to use in asp net core mvc ap
 2. Make links, forms urls etc. in views as you would do with helpers in your cshtml pages.
 3. Catch all route values in controller.
 
+### Continues Integration
+| Build server                | Build status                                                                                                                                                        | Integration tests                                                                                                                                                   | Functional tests                                                                                                                                                   |
+|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AppVeyor                    | [![Build status](https://ci.appveyor.com/api/projects/status/qmob3plw4quw90ny/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-u73ra/branch/master)                  | [![Build status](https://ci.appveyor.com/api/projects/status/cuqlv91ogsyil6bi/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain/branch/master)  | [![Build status](https://ci.appveyor.com/api/projects/status/j8v2jc6muxai92jb/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-07mgu/branch/master)
+
 ## Setup
 ### Startup.cs
 

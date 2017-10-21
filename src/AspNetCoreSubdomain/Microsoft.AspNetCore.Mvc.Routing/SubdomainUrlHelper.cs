@@ -20,7 +20,7 @@ namespace Microsoft.AspNetCore.Mvc.Routing
         private readonly RouteValueDictionary _routeValueDictionary;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UrlHelper"/> class using the specified
+        /// Initializes a new instance of the <see cref="SubdomainUrlHelper"/> class using the specified
         /// <paramref name="actionContext"/>.
         /// </summary>
         /// <param name="actionContext">The <see cref="Mvc.ActionContext"/> for the current request.</param>

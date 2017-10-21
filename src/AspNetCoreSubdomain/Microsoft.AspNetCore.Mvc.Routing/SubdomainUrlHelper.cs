@@ -20,7 +20,7 @@ namespace Microsoft.AspNetCore.Mvc.Routing
         private readonly RouteValueDictionary _routeValueDictionary;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UrlHelper"/> class using the specified
+        /// Initializes a new instance of the <see cref="SubdomainUrlHelper"/> class using the specified
         /// <paramref name="actionContext"/>.
         /// </summary>
         /// <param name="actionContext">The <see cref="Mvc.ActionContext"/> for the current request.</param>
@@ -81,14 +81,6 @@ namespace Microsoft.AspNetCore.Mvc.Routing
         }
 
         /// <inheritdoc />
-        public override bool IsLocalUrl(string url)
-        {
-
-            //todo: body
-            return base.IsLocalUrl(url);
-        }
-
-        /// <inheritdoc />
         public override string RouteUrl(UrlRouteContext routeContext)
         {
             if (routeContext == null)
@@ -105,57 +97,6 @@ namespace Microsoft.AspNetCore.Mvc.Routing
             }
             return GenerateUrl(routeContext.Protocol, routeContext.Host, pathData, routeContext.Fragment);
         }
-
-        //// Internal for unit testing.
-        //internal void AppendPathAndFragment(StringBuilder builder, VirtualPathData pathData, string fragment)
-        //{
-        //    var pathBase = HttpContext.Request.PathBase;
-
-        //    if (!pathBase.HasValue)
-        //    {
-        //        if (pathData.VirtualPath.Length == 0)
-        //        {
-        //            builder.Append("/");
-        //        }
-        //        else
-        //        {
-        //            if (!pathData.VirtualPath.StartsWith("/", StringComparison.Ordinal))
-        //            {
-        //                builder.Append("/");
-        //            }
-
-        //            builder.Append(pathData.VirtualPath);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (pathData.VirtualPath.Length == 0)
-        //        {
-        //            builder.Append(pathBase.Value);
-        //        }
-        //        else
-        //        {
-        //            builder.Append(pathBase.Value);
-
-        //            if (pathBase.Value.EndsWith("/", StringComparison.Ordinal))
-        //            {
-        //                builder.Length--;
-        //            }
-
-        //            if (!pathData.VirtualPath.StartsWith("/", StringComparison.Ordinal))
-        //            {
-        //                builder.Append("/");
-        //            }
-
-        //            builder.Append(pathData.VirtualPath);
-        //        }
-        //    }
-
-        //    if (!string.IsNullOrEmpty(fragment))
-        //    {
-        //        builder.Append("#").Append(fragment);
-        //    }
-        //}
 
         /// <inheritdoc />
         public override string Content(string contentPath)
@@ -201,16 +142,6 @@ namespace Microsoft.AspNetCore.Mvc.Routing
             }
 
             return new RouteValueDictionary(values);
-        }
-
-        private StringBuilder GetStringBuilder()
-        {
-            if (_stringBuilder == null)
-            {
-                _stringBuilder = new StringBuilder();
-            }
-
-            return _stringBuilder;
         }
     }
 }

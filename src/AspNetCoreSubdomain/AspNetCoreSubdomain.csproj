@@ -2,21 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
-    <Version>0.4.0</Version>
+    <Version>0.5.0</Version>
     <Authors>Mariusz Kerl</Authors>
     <Company />
     <Description>Create subdomain routes like default route semantics, build subdomain links with helpers.</Description>
     <PackageTags>web mvc aspnet core routing subdomain</PackageTags>
     <PackageReleaseNotes>
-    Html Helpers: BeginForm, ActionLink have been tested
-    Tag Helpers: Form, Anchor have been tested
-    Fixed issue generating subdomain link for current host which sometimes was generating absolut path.
+    Defaults in subdomain template are now supported
     </PackageReleaseNotes>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
     <Copyright>Mariusz Kerl</Copyright>
     <PackageLicenseUrl>https://github.com/mariuszkerl/AspNetCoreSubdomain/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/mariuszkerl/AspNetCoreSubdomain</PackageProjectUrl>
+    <PackageIconUrl>https://loled.blob.core.windows.net/images/subdomain-logo-64.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -14,6 +14,10 @@ Goal of that lib is to make subdomain routing easy to use in asp net core mvc ap
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | AppVeyor                    | [![Build status](https://ci.appveyor.com/api/projects/status/qmob3plw4quw90ny/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-u73ra/branch/master)                  | [![Build status](https://ci.appveyor.com/api/projects/status/3obt7r9yi4jgqblp/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-s4142/branch/master) | [![Build status](https://ci.appveyor.com/api/projects/status/cuqlv91ogsyil6bi/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain/branch/master)  | [![Build status](https://ci.appveyor.com/api/projects/status/j8v2jc6muxai92jb/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-07mgu/branch/master)
 
+## Support my work
+[![Gratipay](https://img.shields.io/gratipay/project/AspNetCoreSubdomain.svg)](https://gratipay.com/AspNetCoreSubdomain/)
+
+
 ## Setup
 ### Startup.cs
 

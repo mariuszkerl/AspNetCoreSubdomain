@@ -19,7 +19,8 @@ namespace TestHelpers
             IModelMetadataProvider metadataProvider,
             IOptions<MvcViewOptions> mvcViewOptions,
             IUrlHelperFactory urlHelperFactory)
-                : base(Mock.Of<IAntiforgery>(), mvcViewOptions, metadataProvider, urlHelperFactory, new HtmlTestEncoder(), new ClientValidatorCache(), new DefaultValidationHtmlAttributeProvider(mvcViewOptions, metadataProvider, new ClientValidatorCache()))
+                : base(Mock.Of<IAntiforgery>(), mvcViewOptions, metadataProvider, urlHelperFactory, new HtmlTestEncoder(),
+                      new DefaultValidationHtmlAttributeProvider(mvcViewOptions, metadataProvider, new ClientValidatorCache()))
         {
 
         }

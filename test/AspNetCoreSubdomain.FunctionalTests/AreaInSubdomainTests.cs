@@ -10,12 +10,12 @@ using Xunit;
 
 namespace AspNetCoreSubdomain.FunctionalTests
 {
-    public class UnitTest1
+    public class AreaInSubdomainTests
     {
         private HttpClient _client { get; }
 
         private TestServer _server { get; set; }
-        public UnitTest1()
+        public AreaInSubdomainTests()
         {
             _server = new TestServer(new WebHostBuilder()
                 .UseStartup<AspNetCoreSubdomain.SubdomainsAreaWebSite.Startup>());

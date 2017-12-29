@@ -1,4 +1,5 @@
 using AspNetCoreSubdomain.SubdomainsAreaWebSite;
+using AspNetCoreSubdomain.WebSites.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RoutingWebSite

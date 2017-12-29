@@ -38,10 +38,17 @@ namespace Microsoft.AspNetCore.Routing
             string foundHostname = GetHostname(host);
 
             if (foundHostname == null && Subdomain != null)
+            {
                 return Task.CompletedTask;
+            }
 
             if (Subdomain == null)
             {
+                if (foundHostname != null)
+                {
+                    return Task.CompletedTask;
+                }
+
                 return base.RouteAsync(context);
             }
 

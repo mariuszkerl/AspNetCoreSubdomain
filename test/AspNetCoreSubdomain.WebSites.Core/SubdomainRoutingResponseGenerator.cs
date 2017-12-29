@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using System;
+using System.Collections.Generic;
 
-namespace AspNetCoreSubdomain.SubdomainsAreaWebSite
+namespace AspNetCoreSubdomain.WebSites.Core
 {
     public class SubdomainRoutingResponseGenerator
     {
@@ -15,7 +14,7 @@ namespace AspNetCoreSubdomain.SubdomainsAreaWebSite
 
         public SubdomainRoutingResponseGenerator(IActionContextAccessor contextAccessor, IUrlHelperFactory urlHelperFactory)
         {
-            if(!(urlHelperFactory is SubdomainUrlHelperFactory))
+            if (!(urlHelperFactory is SubdomainUrlHelperFactory))
             {
                 throw new ArgumentException("IUrlHelperFactory is of wrong type. Please use AddSubdomains method in your startup class", "urlHelperFactory");
             }

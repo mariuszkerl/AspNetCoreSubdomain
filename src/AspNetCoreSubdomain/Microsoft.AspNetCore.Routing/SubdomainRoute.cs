@@ -26,6 +26,7 @@ namespace Microsoft.AspNetCore.Routing
             SubdomainParsed = TemplateParser.Parse(subdomain);
             Defaults = GetDefaults(SubdomainParsed, Defaults);
         }
+
         public override Task RouteAsync(RouteContext context)
         {
             var host = context.HttpContext.Request.Host.Value;

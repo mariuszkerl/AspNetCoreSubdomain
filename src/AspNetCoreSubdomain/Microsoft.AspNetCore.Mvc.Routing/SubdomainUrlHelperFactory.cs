@@ -6,8 +6,16 @@ using System.Text;
 
 namespace Microsoft.AspNetCore.Mvc.Routing
 {
-    public class SubdomainUrlHelperFactory : /*UrlHelperFactory, */IUrlHelperFactory
+    /// <summary>
+    /// A factory for creating <see cref="IUrlHelper"/> instances.
+    /// </summary>
+    public class SubdomainUrlHelperFactory : IUrlHelperFactory
     {
+        /// <summary>
+        /// Gets an <see cref="IUrlHelper"/> for the request associated with context.
+        /// </summary>
+        /// <param name="context">The <see cref="ActionContext"/> associated with the current request.</param>
+        /// <returns>An <see cref="IUrlHelper"/> for the request associated with context</returns>
         public IUrlHelper GetUrlHelper(ActionContext context)
         {
             var httpContext = context.HttpContext;
@@ -15,17 +23,11 @@ namespace Microsoft.AspNetCore.Mvc.Routing
             if (httpContext == null)
             {
                 throw new ArgumentException(nameof(ActionContext.HttpContext));
-                //throw new ArgumentException(Resources.FormatPropertyOfTypeCannotBeNull(
-                //    nameof(ActionContext.HttpContext),
-                //    nameof(ActionContext)));
             }
 
             if (httpContext.Items == null)
             {
                 throw new ArgumentException(nameof(HttpContext.Items));
-                //throw new ArgumentException(Resources.FormatPropertyOfTypeCannotBeNull(
-                //    nameof(HttpContext.Items),
-                //    nameof(HttpContext)));
             }
 
             // Perf: Create only one UrlHelper per context

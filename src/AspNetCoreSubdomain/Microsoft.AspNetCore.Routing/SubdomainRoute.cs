@@ -3,12 +3,7 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing.Template;
-using System.Text.Encodings.Web;
-using Microsoft.Extensions.ObjectPool;
-using Microsoft.AspNetCore.Routing.Internal;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Routing.Subdomain.Microsoft.AspNetCore.Routing;
+
 using System;
 
 namespace Microsoft.AspNetCore.Routing
@@ -31,6 +26,7 @@ namespace Microsoft.AspNetCore.Routing
             SubdomainParsed = TemplateParser.Parse(subdomain);
             Defaults = GetDefaults(SubdomainParsed, Defaults);
         }
+
         public override Task RouteAsync(RouteContext context)
         {
             var host = context.HttpContext.Request.Host.Value;

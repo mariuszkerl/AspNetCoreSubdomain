@@ -9,13 +9,11 @@ using Microsoft.AspNetCore.Routing;
 namespace Microsoft.AspNetCore.Mvc.Routing
 {
     /// <summary>
-    /// An implementation of <see cref="IUrlHelper"/> that contains methods to
-    /// build URLs for ASP.NET MVC within an application.
+    /// An implementation of <see cref="IUrlHelper"/> it inherits from <see cref="UrlHelper"/>
+    /// and overrides some functionality for subdomain routing.
     /// </summary>
     public class SubdomainUrlHelper : UrlHelper, IUrlHelper
     {
-        // Perf: Share the StringBuilder object across multiple calls of GenerateURL for this UrlHelper
-        private StringBuilder _stringBuilder;
         // Perf: Reuse the RouteValueDictionary across multiple calls of Action for this UrlHelper
         private readonly RouteValueDictionary _routeValueDictionary;
 

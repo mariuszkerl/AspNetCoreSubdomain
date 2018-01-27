@@ -71,3 +71,6 @@ public IActionResult Action1()
 ```
 
 Having url ```http://home.localhost:54575/``` will invoke ```Action1``` method in ```Home``` controller.
+
+## Running samples project
+https://github.com/mariuszkerl/AspNetCoreSubdomain/wiki/Running-samples-project

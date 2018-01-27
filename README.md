@@ -14,6 +14,9 @@ Goal of that lib is to make subdomain routing easy to use in asp net core mvc ap
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | AppVeyor                    | [![Build status](https://ci.appveyor.com/api/projects/status/qmob3plw4quw90ny/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-u73ra/branch/master)                  | [![Build status](https://ci.appveyor.com/api/projects/status/3obt7r9yi4jgqblp/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-s4142/branch/master) | [![Build status](https://ci.appveyor.com/api/projects/status/cuqlv91ogsyil6bi/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain/branch/master)  | [![Build status](https://ci.appveyor.com/api/projects/status/j8v2jc6muxai92jb/branch/master?svg=true)](https://ci.appveyor.com/project/mariuszkerl/aspnetcoresubdomain-07mgu/branch/master)
 
+## Wiki
+https://github.com/mariuszkerl/AspNetCoreSubdomain/wiki
+
 ## Setup
 ### Startup.cs
 
@@ -68,30 +71,3 @@ public IActionResult Action1()
 ```
 
 Having url ```http://home.localhost:54575/``` will invoke ```Action1``` method in ```Home``` controller.
-
-## Samples
-For samples definitely look at ```Samples``` project. For running it you have to correctly setup some files.
-### C:\Windows\System32\drivers\etc\hosts
-```
-    127.0.0.1   subdomain1.localhost
-    127.0.0.1   subdomain2.localhost
-    127.0.0.1   subdomain3.localhost
-    127.0.0.1   home.localhost
-    127.0.0.1   test.localhost
-    127.0.0.1	staticsubdomain1.localhost
-    127.0.0.1	staticsubdomain2.localhost
-    127.0.0.1	subdomains.page.localhost
-    127.0.0.1	subdomain.forms.page.localhost
-```
-### {YourPath}\AspNetCoreSubdomain\src\.vs\config\applicationhost.config
-That's only needed if running with Visual Studio.
-Modify section ```<bindings>``` add:
-```xml
-    <binding protocol="http" bindingInformation="*:54575:subdomain1.localhost" />
-    <binding protocol="http" bindingInformation="*:54575:subdomain2.localhost" />
-    <binding protocol="http" bindingInformation="*:54575:subdomain3.localhost" />
-    <binding protocol="http" bindingInformation="*:54575:home.localhost" />
-    <binding protocol="http" bindingInformation="*:54575:test.localhost" />
-    <binding protocol="http" bindingInformation="*:54575:subdomains.page.localhost" />
-    <binding protocol="http" bindingInformation="*:54575:subdomain.forms.page.localhost" />
-```

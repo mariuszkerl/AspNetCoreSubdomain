@@ -10,6 +10,9 @@ namespace Microsoft.AspNetCore.Routing
 {
     public class SubDomainRoute : Route
     {
+        private readonly string w3 = "www.";
+        private readonly string w3Regex = "^www.";
+
         public string[] Hostnames { get; private set; }
 
         public string Subdomain { get; private set; }
@@ -97,7 +100,6 @@ namespace Microsoft.AspNetCore.Routing
 
         public override VirtualPathData GetVirtualPath(VirtualPathContext context)
         {
-            //todo: we could check also if current host is subdomain, if it is not then use base GetVirtualPathContext for normal url
             if (Subdomain == null)
             {
                 //if route is without subdomain and we are on host without subdomain use base method
@@ -141,9 +143,10 @@ namespace Microsoft.AspNetCore.Routing
 
         private string GetHostname(string host)
         {
+            var nonW3Host = System.Text.RegularExpressions.Regex.Replace(host, w3Regex, "");
             foreach (var hostname in Hostnames)
             {
-                if (!host.EndsWith(hostname) || host == hostname)
+                if (!nonW3Host.EndsWith(hostname) || nonW3Host == hostname)
                 {
                     continue;
                 }
@@ -239,10 +242,10 @@ namespace Microsoft.AspNetCore.Routing
         {
             string foundHostname = GetHostname(context.HttpContext.Request.Host.Value);
 
-            string host = context.HttpContext.Request.Host.Value;
+            string host = System.Text.RegularExpressions.Regex.Replace(context.HttpContext.Request.Host.Value, w3Regex, "");
             if (!string.IsNullOrEmpty(foundHostname))
             {
-                var subdomain = context.HttpContext.Request.Host.Value.Substring(0, context.HttpContext.Request.Host.Value.IndexOf(foundHostname) - 1);
+                var subdomain = host.Substring(0, host.IndexOf(foundHostname) - 1);
 
                 if (!string.IsNullOrEmpty(subdomain))
                 {
@@ -251,6 +254,11 @@ namespace Microsoft.AspNetCore.Routing
             }
 
             var hostBuilder = new StringBuilder();
+
+            if(context.HttpContext.Request.Host.Value.StartsWith(w3))
+            {
+                hostBuilder.Append(w3);
+            }
 
             buildAction(hostBuilder, host);
 

@@ -97,7 +97,6 @@ namespace Microsoft.AspNetCore.Routing
 
         public override VirtualPathData GetVirtualPath(VirtualPathContext context)
         {
-            //todo: we could check also if current host is subdomain, if it is not then use base GetVirtualPathContext for normal url
             if (Subdomain == null)
             {
                 //if route is without subdomain and we are on host without subdomain use base method

@@ -2,15 +2,12 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>Mariusz Kerl</Authors>
     <Company />
     <Description>Create subdomain routes like default route semantics, build subdomain links with helpers.</Description>
     <PackageTags>web mvc aspnet core routing subdomain</PackageTags>
-    <PackageReleaseNotes>
-    Added summaries for methods
-    Removed SubdomainVirtualPathContext  class which was not used anymore
-    </PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed issue when subdomain routing was not working for urls starting with www</PackageReleaseNotes>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
     <Copyright>Mariusz Kerl</Copyright>

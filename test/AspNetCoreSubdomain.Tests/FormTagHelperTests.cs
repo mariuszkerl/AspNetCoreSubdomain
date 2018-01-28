@@ -31,7 +31,7 @@ public class FormTagHelperTests
         var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
         {
             routeBuilder.MapSubdomainRoute(
-                new[] { "localhost" },
+                new[] { "example.com" },
                 "default",
                 "{area}",
                 "{controller=Home}/{action=Index}");
@@ -61,7 +61,7 @@ public class FormTagHelperTests
         var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
         {
             routeBuilder.MapSubdomainRoute(
-                new[] { "localhost" },
+                new[] { "example.com" },
                 "default",
                 "{controller}",
                 "{action=Index}");
@@ -90,7 +90,7 @@ public class FormTagHelperTests
         var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
         {
             routeBuilder.MapSubdomainRoute(
-                new[] { "localhost" },
+                new[] { "example.com" },
                 "default",
                 "constantsubdomain",
                 "{controller=Home}/{action=Index}");

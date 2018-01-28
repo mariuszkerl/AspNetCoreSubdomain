@@ -41,7 +41,7 @@ namespace AspNetCoreSubdomain.Tests
             var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
             {
                 routeBuilder.MapSubdomainRoute(
-                    new[] { "localhost" },
+                    new[] { "example.com" },
                     "default",
                     "{area}",
                     "{controller=Home}/{action=Index}");
@@ -77,7 +77,7 @@ namespace AspNetCoreSubdomain.Tests
             var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
             {
                 routeBuilder.MapSubdomainRoute(
-                    new[] { "localhost" },
+                    new[] { "example.com" },
                     "default",
                     "{controller}",
                     "{action=Index}");
@@ -112,7 +112,7 @@ namespace AspNetCoreSubdomain.Tests
             var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
             {
                 routeBuilder.MapSubdomainRoute(
-                    new[] { "localhost" },
+                    new[] { "example.com" },
                     "default",
                     "constantsubdomain",
                     "{controller=Home}/{action=Index}");

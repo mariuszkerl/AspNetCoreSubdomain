@@ -10,9 +10,9 @@ namespace Microsoft.AspNetCore.Routing
 {
     public class SubDomainRoute : Route
     {
+        private readonly string[] _unavailableConstraints;
         private readonly string w3 = "www.";
         private readonly string w3Regex = "^www.";
-
         public string[] Hostnames { get; private set; }
 
         public string Subdomain { get; private set; }
@@ -28,6 +28,11 @@ namespace Microsoft.AspNetCore.Routing
 
             SubdomainParsed = TemplateParser.Parse(subdomain);
             Defaults = GetDefaults(SubdomainParsed, Defaults);
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing
+            _unavailableConstraints = new[]
+            {
+                 ""
+            };
         }
 
         public override Task RouteAsync(RouteContext context)
@@ -58,6 +63,7 @@ namespace Microsoft.AspNetCore.Routing
                 return Task.CompletedTask;
             }
 
+            var parsedTemplate = TemplateParser.Parse(Subdomain);
             //that's for overriding default for subdomain
             if (IsParameterName(Subdomain) &&
                 Defaults.ContainsKey(ParameterNameFrom(Subdomain)) &&

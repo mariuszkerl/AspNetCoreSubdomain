@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing.Template;
 
 using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.AspNetCore.Routing
 {
@@ -13,6 +15,9 @@ namespace Microsoft.AspNetCore.Routing
         private readonly string[] _unavailableConstraints;
         private readonly string w3 = "www.";
         private readonly string w3Regex = "^www.";
+
+        private readonly IDictionary<string, IRouteConstraint> constraintsWithSubdomainConstraint;
+
         public string[] Hostnames { get; private set; }
 
         public string Subdomain { get; private set; }
@@ -24,11 +29,27 @@ namespace Microsoft.AspNetCore.Routing
            : base(target, routeName, routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
         {
             Hostnames = hostnames;
-            Subdomain = subdomain;
-
             SubdomainParsed = TemplateParser.Parse(subdomain);
-            Defaults = GetDefaults(SubdomainParsed, Defaults);
+            Constraints = GetConstraints(inlineConstraintResolver, TemplateParser.Parse(routeTemplate), constraints);
+
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing
+            constraintsWithSubdomainConstraint = GetConstraints(ConstraintResolver, SubdomainParsed, null);
+
+            if (constraintsWithSubdomainConstraint.Count == 1)
+            {
+                Subdomain = RemoveConstraint(subdomain);
+            }
+            else
+            {
+                Subdomain = subdomain;
+            }
+
+            Defaults = GetDefaults(SubdomainParsed, Defaults);
+
+            foreach (var c in Constraints)
+            {
+                constraintsWithSubdomainConstraint.Add(c);
+            }
             _unavailableConstraints = new[]
             {
                  ""
@@ -71,6 +92,25 @@ namespace Microsoft.AspNetCore.Routing
             {
                 context.RouteData.Values.Add(ParameterNameFrom(Subdomain), subdomain);
             }
+
+            if (IsParameterName(Subdomain) &&
+                constraintsWithSubdomainConstraint.ContainsKey(ParameterNameFrom(Subdomain)))
+            {
+                if (!RouteConstraintMatcher.Match(
+                        constraintsWithSubdomainConstraint,
+                        new RouteValueDictionary
+                        {
+                            {  ParameterNameFrom(Subdomain), subdomain }
+                        },
+                        context.HttpContext,
+                        this,
+                        RouteDirection.IncomingRequest,
+                        context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(RouteConstraintMatcher).FullName)))
+                {
+                    return Task.CompletedTask;
+                }
+            }
+
 
             return base.RouteAsync(context);
         }
@@ -261,7 +301,7 @@ namespace Microsoft.AspNetCore.Routing
 
             var hostBuilder = new StringBuilder();
 
-            if(context.HttpContext.Request.Host.Value.StartsWith(w3))
+            if (context.HttpContext.Request.Host.Value.StartsWith(w3))
             {
                 hostBuilder.Append(w3);
             }
@@ -269,6 +309,11 @@ namespace Microsoft.AspNetCore.Routing
             buildAction(hostBuilder, host);
 
             return hostBuilder;
+        }
+
+        private string RemoveConstraint(string segment)
+        {
+            return $"{segment.Substring(0, segment.IndexOf(':'))}}}";
         }
     }
 }

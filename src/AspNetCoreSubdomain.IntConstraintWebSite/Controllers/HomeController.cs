@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AspNetCoreSubdomain.WebSites.Core;
+using System;
 
 namespace AspNetCoreSubdomain.IntConstraintWebSite.Controllers
 {
@@ -12,9 +13,18 @@ namespace AspNetCoreSubdomain.IntConstraintWebSite.Controllers
             _generator = generator;
         }
 
-        public IActionResult Index(int? parameter = 0)
+        public IActionResult Index(int parameter)
         {
             return _generator.Generate("/", "/Home", "/Home/Index");
+        }
+
+        public IActionResult Boolean(bool parameter)
+        {
+            return _generator.Generate("/Home/Boolean");
+        }
+        public IActionResult Guid(Guid id)
+        {
+            return _generator.Generate("/Home/Guid");
         }
     }
 }

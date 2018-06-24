@@ -7,14 +7,23 @@ using Microsoft.AspNetCore.Routing.Template;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Microsoft.AspNetCore.Routing
 {
     public class SubDomainRoute : Route
     {
-        private readonly string[] _unavailableConstraints;
-        private readonly string w3 = "www.";
-        private readonly string w3Regex = "^www.";
+
+        private static readonly string w3 = "www.";
+        private static readonly string w3Regex = "^www.";
+        private static readonly IDictionary<string, Type> _unavailableConstraints = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "datetime", typeof(DateTimeRouteConstraint) },
+            { "decimal", typeof(DecimalRouteConstraint) },
+            { "double", typeof(DoubleRouteConstraint) },
+            { "float", typeof(FloatRouteConstraint) },
+        };
 
         private readonly IDictionary<string, IRouteConstraint> constraintsWithSubdomainConstraint;
 
@@ -25,7 +34,7 @@ namespace Microsoft.AspNetCore.Routing
         public RouteTemplate SubdomainParsed { get; private set; }
 
         public SubDomainRoute(string[] hostnames, string subdomain, IRouter target, string routeName, string routeTemplate, RouteValueDictionary defaults, IDictionary<string, object> constraints,
-           RouteValueDictionary dataTokens, IInlineConstraintResolver inlineConstraintResolver)
+           RouteValueDictionary dataTokens, IInlineConstraintResolver inlineConstraintResolver, IOptions<RouteOptions> routeOptions)
            : base(target, routeName, routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
         {
             Hostnames = hostnames;
@@ -43,17 +52,22 @@ namespace Microsoft.AspNetCore.Routing
             {
                 Subdomain = subdomain;
             }
-
+            
+            if (IsParameterName(Subdomain))
+            {
+                if(constraintsWithSubdomainConstraint.Any(x => _unavailableConstraints.Values.Contains(x.Value.GetType()) && x.Key == ParameterNameFrom(Subdomain)))
+                {
+                    throw new ArgumentException($"Constraint invalid on subdomain! " +
+                        $"Constraints: {string.Join(Environment.NewLine, _unavailableConstraints.Select(x => x.Key))}{Environment.NewLine}are unavailable for subdomain.");
+                }
+            }
+            
             Defaults = GetDefaults(SubdomainParsed, Defaults);
 
             foreach (var c in Constraints)
             {
                 constraintsWithSubdomainConstraint.Add(c);
             }
-            _unavailableConstraints = new[]
-            {
-                 ""
-            };
         }
 
         public override Task RouteAsync(RouteContext context)

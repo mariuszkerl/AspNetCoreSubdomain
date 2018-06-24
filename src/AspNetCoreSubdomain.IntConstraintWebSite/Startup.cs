@@ -39,8 +39,18 @@ namespace AspNetCoreSubdomain.IntConstraintWebSite
                 routes.MapSubdomainRoute(
                     hostnames: hosts,
                     subdomain: "{parameter:int}",
-                    name: "SubdomainDefault",
+                    name: "IntSubdomain",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapSubdomainRoute(
+                    hostnames: hosts,
+                    subdomain: "{parameter:bool}",
+                    name: "BoolSubdomain",
+                    template: "{controller=Home}/{action=Boolean}/{id?}");
+                routes.MapSubdomainRoute(
+                    hostnames: hosts,
+                    subdomain: "{parameter:decimal}",
+                    name: "test",
+                    template: "{controller=Home}/{action=Boolean}/{id?}");
             });
         }
     }

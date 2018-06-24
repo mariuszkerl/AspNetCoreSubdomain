@@ -48,5 +48,67 @@ namespace AspNetCoreSubdomain.FunctionalTests
                 result.RouteValues);
         }
 
+        [Fact]
+        public async Task InlineIntConstraintIsNotFoundOnStringSubdomain()
+        {
+            // Arrange & Act
+            var response = await _client.GetAsync("http://test.localhost/Home/Index");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task InlineBoolConstraintIsWorkingOnSubdomain()
+        {
+            // Arrange & Act
+            var response = await _client.GetAsync("http://true.localhost/");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var body = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SubdomainRoutingResult>(body);
+
+            Assert.Contains("/Home/Boolean", result.ExpectedUrls);
+            Assert.Equal("Home", result.Controller);
+            Assert.Equal("Boolean", result.Action);
+            Assert.Equal(
+                new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "parameter", "true" },
+                    { "controller", "Home" },
+                    { "action", "Boolean" },
+                },
+                result.RouteValues);
+        }
+
+
+
+        //[Fact]
+        //public async Task InlineGuidConstraintIsWorkingOnSubdomain()
+        //{
+        //    //todo: left for later since guid can be surrrounded with {} braces
+        //    // Arrange & Act
+        //    var response = await _client.GetAsync("http://true.localhost/Home/Guid/75508A0E-0BFA-42C0-9D65-055331F4D40B");
+
+        //    // Assert
+        //    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        //    var body = await response.Content.ReadAsStringAsync();
+        //    var result = JsonConvert.DeserializeObject<SubdomainRoutingResult>(body);
+
+        //    Assert.Contains("/Home/Boolean", result.ExpectedUrls);
+        //    Assert.Equal("Home", result.Controller);
+        //    Assert.Equal("Boolean", result.Action);
+        //    Assert.Equal(
+        //        new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+        //        {
+        //            { "parameter", "true" },
+        //            { "controller", "Home" },
+        //            { "action", "Boolean" },
+        //        },
+        //        result.RouteValues);
+        //}
     }
 }

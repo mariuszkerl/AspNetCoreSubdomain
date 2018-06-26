@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace AspNetCoreSubdomain.IntConstraintWebSite
+namespace AspNetCoreSubdomain.ConstraintsWebSite
 {
     public class Startup
     {

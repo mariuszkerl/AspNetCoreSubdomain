@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace AspNetCoreSubdomain.IntConstraintWebSite
+namespace AspNetCoreSubdomain.ConstraintsWebSite
 {
     public class Program
     {

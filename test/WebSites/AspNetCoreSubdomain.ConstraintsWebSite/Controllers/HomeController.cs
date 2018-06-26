@@ -2,7 +2,7 @@
 using AspNetCoreSubdomain.WebSites.Core;
 using System;
 
-namespace AspNetCoreSubdomain.IntConstraintWebSite.Controllers
+namespace AspNetCoreSubdomain.ConstraintsWebSite.Controllers
 {
     public class HomeController : Controller
     {

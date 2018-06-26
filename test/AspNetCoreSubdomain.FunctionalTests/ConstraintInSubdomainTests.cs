@@ -19,7 +19,7 @@ namespace AspNetCoreSubdomain.FunctionalTests
         public ConstraintInSubdomainTests()
         {
             _server = new TestServer(new WebHostBuilder()
-                .UseStartup<AspNetCoreSubdomain.IntConstraintWebSite.Startup>());
+                .UseStartup<AspNetCoreSubdomain.ConstraintsWebSite.Startup>());
             _client = _server.CreateClient();
         }
 

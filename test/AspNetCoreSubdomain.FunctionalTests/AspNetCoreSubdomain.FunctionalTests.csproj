@@ -9,7 +9,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AspNetCoreSubdomain.IntConstraintWebSite\AspNetCoreSubdomain.IntConstraintWebSite.csproj" />
+    <ProjectReference Include="..\WebSites\AspNetCoreSubdomain.ConstraintsWebSite\AspNetCoreSubdomain.ConstraintsWebSite.csproj" />
     <ProjectReference Include="..\WebSites\AspNetCoreSubdomain.RoutesWithoutSubdomain\AspNetCoreSubdomain.RoutesWithoutSubdomain.csproj" />
     <ProjectReference Include="..\WebSites\AspNetCoreSubdomain.SubdomainsAreaWebSite\AspNetCoreSubdomain.SubdomainsAreaWebSite.csproj" />
   </ItemGroup>

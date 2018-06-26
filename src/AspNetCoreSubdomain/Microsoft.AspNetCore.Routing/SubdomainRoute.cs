@@ -53,7 +53,7 @@ namespace Microsoft.AspNetCore.Routing
                 Subdomain = subdomain;
             }
             
-            if (IsParameterName(Subdomain))
+            if (!string.IsNullOrEmpty(Subdomain) && IsParameterName(Subdomain))
             {
                 if(constraintsWithSubdomainConstraint.Any(x => _unavailableConstraints.Values.Contains(x.Value.GetType()) && x.Key == ParameterNameFrom(Subdomain)))
                 {

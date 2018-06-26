@@ -22,9 +22,13 @@ namespace AspNetCoreSubdomain.IntConstraintWebSite.Controllers
         {
             return _generator.Generate("/Home/Boolean");
         }
-        public IActionResult Guid(Guid id)
+        public IActionResult Guid(Guid parameter)
         {
             return _generator.Generate("/Home/Guid");
+        }
+        public IActionResult Long(long parameter)
+        {
+            return _generator.Generate("/Home/Long");
         }
     }
 }

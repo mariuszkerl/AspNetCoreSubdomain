@@ -43,9 +43,19 @@ namespace AspNetCoreSubdomain.IntConstraintWebSite
                     template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapSubdomainRoute(
                     hostnames: hosts,
+                    subdomain: "{parameter:long}",
+                    name: "LongSubdomain",
+                    template: "{controller=Home}/{action=Long}/{id?}");
+                routes.MapSubdomainRoute(
+                    hostnames: hosts,
                     subdomain: "{parameter:bool}",
                     name: "BoolSubdomain",
                     template: "{controller=Home}/{action=Boolean}/{id?}");
+                routes.MapSubdomainRoute(
+                    hostnames: hosts,
+                    subdomain: "{parameter:guid}",
+                    name: "GuidSubdomain",
+                    template: "{controller=Home}/{action=Guid}/{id?}");
             });
         }
     }

@@ -27,7 +27,7 @@ namespace AspNetCoreSubdomain.FunctionalTests
         public async Task InlineIntConstraintIsWorkingOnSubdomain()
         {
             // Arrange & Act
-            var response = await _client.GetAsync("http://1.localhost/Home/Index");
+            var response = await _client.GetAsync("http://1.localhost/");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -52,7 +52,7 @@ namespace AspNetCoreSubdomain.FunctionalTests
         public async Task InlineIntConstraintIsNotFoundOnStringSubdomain()
         {
             // Arrange & Act
-            var response = await _client.GetAsync("http://test.localhost/Home/Index");
+            var response = await _client.GetAsync("http://test.localhost/");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -85,30 +85,55 @@ namespace AspNetCoreSubdomain.FunctionalTests
 
 
 
-        //[Fact]
-        //public async Task InlineGuidConstraintIsWorkingOnSubdomain()
-        //{
-        //    //todo: left for later since guid can be surrrounded with {} braces
-        //    // Arrange & Act
-        //    var response = await _client.GetAsync("http://true.localhost/Home/Guid/75508A0E-0BFA-42C0-9D65-055331F4D40B");
+        [Fact]
+        public async Task InlineGuidConstraintIsWorkingOnSubdomain()
+        {
+            // Arrange & Act
+            var response = await _client.GetAsync("http://75508A0E-0BFA-42C0-9D65-055331F4D40B.localhost/");
 
-        //    // Assert
-        //    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        //    var body = await response.Content.ReadAsStringAsync();
-        //    var result = JsonConvert.DeserializeObject<SubdomainRoutingResult>(body);
+            var body = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SubdomainRoutingResult>(body);
 
-        //    Assert.Contains("/Home/Boolean", result.ExpectedUrls);
-        //    Assert.Equal("Home", result.Controller);
-        //    Assert.Equal("Boolean", result.Action);
-        //    Assert.Equal(
-        //        new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
-        //        {
-        //            { "parameter", "true" },
-        //            { "controller", "Home" },
-        //            { "action", "Boolean" },
-        //        },
-        //        result.RouteValues);
-        //}
+            Assert.Contains("/Home/Guid", result.ExpectedUrls);
+            Assert.Equal("Home", result.Controller);
+            Assert.Equal("Guid", result.Action);
+            Assert.Equal(
+                new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "parameter", "75508A0E-0BFA-42C0-9D65-055331F4D40B".ToLower() },
+                    { "controller", "Home" },
+                    { "action", "Guid" },
+                },
+                result.RouteValues);
+        }
+
+        [Fact]
+        public async Task InlineLongConstraintIsWorkingOnSubdomain()
+        {
+            // Arrange & Act
+            //add full route since app cannot distinguish between int and long
+            var response = await _client.GetAsync("http://9223372036854775807.localhost/");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var body = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SubdomainRoutingResult>(body);
+
+            Assert.Contains("/Home/Long", result.ExpectedUrls);
+            Assert.Equal("Home", result.Controller);
+            Assert.Equal("Long", result.Action);
+            Assert.Equal(
+                new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "parameter", "9223372036854775807" },
+                    { "controller", "Home" },
+                    { "action", "Long" },
+                },
+                result.RouteValues);
+        }
     }
 }

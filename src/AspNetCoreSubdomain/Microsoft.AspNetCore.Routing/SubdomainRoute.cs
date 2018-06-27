@@ -38,11 +38,23 @@ namespace Microsoft.AspNetCore.Routing
            : base(target, routeName, routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
         {
             Hostnames = hostnames;
+
+            if (string.IsNullOrEmpty(subdomain))
+            {
+                return;
+            }
+
             SubdomainParsed = TemplateParser.Parse(subdomain);
             Constraints = GetConstraints(inlineConstraintResolver, TemplateParser.Parse(routeTemplate), constraints);
 
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing
             constraintsWithSubdomainConstraint = GetConstraints(ConstraintResolver, SubdomainParsed, null);
+
+            //todo: add inline defaults fors subdomain
+            var subdomainDefaults = GetDefaults(TemplateParser.Parse(subdomain), null);
+
+            Defaults = GetDefaults(TemplateParser.Parse(routeTemplate), defaults);
+
 
             if (constraintsWithSubdomainConstraint.Count == 1)
             {
@@ -52,21 +64,24 @@ namespace Microsoft.AspNetCore.Routing
             {
                 Subdomain = subdomain;
             }
-            
-            if (!string.IsNullOrEmpty(Subdomain) && IsParameterName(Subdomain))
+
+            if (IsParameterName(Subdomain))
             {
-                if(constraintsWithSubdomainConstraint.Any(x => _unavailableConstraints.Values.Contains(x.Value.GetType()) && x.Key == ParameterNameFrom(Subdomain)))
+                if (constraintsWithSubdomainConstraint.Any(x => _unavailableConstraints.Values.Contains(x.Value.GetType()) && x.Key == ParameterNameFrom(Subdomain)))
                 {
                     throw new ArgumentException($"Constraint invalid on subdomain! " +
                         $"Constraints: {string.Join(Environment.NewLine, _unavailableConstraints.Select(x => x.Key))}{Environment.NewLine}are unavailable for subdomain.");
                 }
-            }
-            
-            Defaults = GetDefaults(SubdomainParsed, Defaults);
 
-            foreach (var c in Constraints)
-            {
-                constraintsWithSubdomainConstraint.Add(c);
+                foreach (var c in Constraints)
+                {
+                    constraintsWithSubdomainConstraint.Add(c);
+                }
+
+                if (Constraints.Keys.Contains(ParameterNameFrom(subdomain)))
+                {
+                    Constraints.Remove(ParameterNameFrom(subdomain));
+                }
             }
         }
 

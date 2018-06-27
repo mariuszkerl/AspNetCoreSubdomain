@@ -5,23 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-
 namespace AspNetCoreSubdomain.FunctionalTests
 {
-    public class ConstraintInSubdomainTests
+    public class ParameterConstraintInSubdomainTests
     {
         private HttpClient _client { get; }
 
         private TestServer _server { get; set; }
-        public ConstraintInSubdomainTests()
+        public ParameterConstraintInSubdomainTests()
         {
             _server = new TestServer(new WebHostBuilder()
-                .UseStartup<AspNetCoreSubdomain.ConstraintsWebSite.Startup>());
+                .UseStartup<AspNetCoreSubdomain.ParameterConstraintsWebSite.Startup>());
             _client = _server.CreateClient();
         }
+
 
         [Fact]
         public async Task IntConstraintIsWorkingOnSubdomain()
@@ -62,7 +61,7 @@ namespace AspNetCoreSubdomain.FunctionalTests
         public async Task BoolConstraintIsWorkingOnSubdomain()
         {
             // Arrange & Act
-            var response = await _client.GetAsync("http://true.localhost/");
+            var response = await _client.GetAsync("http://true.localhost/Home/Boolean");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

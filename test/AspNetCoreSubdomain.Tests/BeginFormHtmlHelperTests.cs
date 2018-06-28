@@ -21,11 +21,156 @@ using System.IO;
 using System.Buffers;
 using System.Globalization;
 using Microsoft.Extensions.WebEncoders.Testing;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace AspNetCoreSubdomain.Tests
 {
     public class BeginFormHtmlHelperTests
     {
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+        public void CanCreateInlineConstraintSubdomainBeginFormHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedStartTag = $"<form action=\"HtmlEncode[[{expectedUrl}]]\" method=\"HtmlEncode[[post]]\">";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area:bool}",
+                    "{controller=Home}/{action=Index}");
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+            // Act
+            var form = htmlHelper.BeginForm(
+                                            actionName: action,
+                                            controllerName: controller,
+                                            routeValues: new { area = subdomain },
+                                            method: FormMethod.Post,
+                                            antiforgery: false,
+                                            htmlAttributes: null);
+
+            var writer = Assert.IsAssignableFrom<StringWriter>(htmlHelper.ViewContext.Writer);
+            var builder = writer.GetStringBuilder();
+
+            // Assert
+            Assert.Equal(expectedStartTag, builder.ToString());
+        }
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+        public void CanCreateParameterConstraintSubdomainBeginFormHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedStartTag = $"<form action=\"HtmlEncode[[{expectedUrl}]]\" method=\"HtmlEncode[[post]]\">";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area}",
+                    "{controller=Home}/{action=Index}",
+                    null,
+                    new { area = new BoolRouteConstraint() });
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+            // Act
+            var form = htmlHelper.BeginForm(
+                                            actionName: action,
+                                            controllerName: controller,
+                                            routeValues: new { area = subdomain },
+                                            method: FormMethod.Post,
+                                            antiforgery: false,
+                                            htmlAttributes: null);
+
+            var writer = Assert.IsAssignableFrom<StringWriter>(htmlHelper.ViewContext.Writer);
+            var builder = writer.GetStringBuilder();
+
+            // Assert
+            Assert.Equal(expectedStartTag, builder.ToString());
+        }
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.W3ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.W3ConstraintInSubdomainTestData))]
+        public void CanCreateW3InlineConstraintSubdomainBeginFormHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedStartTag = $"<form action=\"HtmlEncode[[{expectedUrl}]]\" method=\"HtmlEncode[[post]]\">";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area:bool}",
+                    "{controller=Home}/{action=Index}");
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+            // Act
+            var form = htmlHelper.BeginForm(
+                                            actionName: action,
+                                            controllerName: controller,
+                                            routeValues: new { area = subdomain },
+                                            method: FormMethod.Post,
+                                            antiforgery: false,
+                                            htmlAttributes: null);
+
+            var writer = Assert.IsAssignableFrom<StringWriter>(htmlHelper.ViewContext.Writer);
+            var builder = writer.GetStringBuilder();
+
+            // Assert
+            Assert.Equal(expectedStartTag, builder.ToString());
+        }
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.W3ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.W3ConstraintInSubdomainTestData))]
+        public void CanCreateW3ParameterConstraintSubdomainBeginFormHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedStartTag = $"<form action=\"HtmlEncode[[{expectedUrl}]]\" method=\"HtmlEncode[[post]]\">";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area}",
+                    "{controller=Home}/{action=Index}",
+                    null,
+                    new { area = new BoolRouteConstraint() });
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+            // Act
+            var form = htmlHelper.BeginForm(
+                                            actionName: action,
+                                            controllerName: controller,
+                                            routeValues: new { area = subdomain },
+                                            method: FormMethod.Post,
+                                            antiforgery: false,
+                                            htmlAttributes: null);
+
+            var writer = Assert.IsAssignableFrom<StringWriter>(htmlHelper.ViewContext.Writer);
+            var builder = writer.GetStringBuilder();
+
+            // Assert
+            Assert.Equal(expectedStartTag, builder.ToString());
+        }
         [Theory]
         [MemberData(nameof(MemberDataFactories.AreaInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaInSubdomainTestData))]
         public void CanCreateAreaSubdomainBeginFormHtmlHelper(

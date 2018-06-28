@@ -49,10 +49,7 @@ namespace Microsoft.AspNetCore.Routing
 
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing
             constraintsWithSubdomainConstraint = GetConstraints(ConstraintResolver, SubdomainParsed, null);
-
-            //todo: add inline defaults fors subdomain
-            var subdomainDefaults = GetDefaults(TemplateParser.Parse(subdomain), null);
-
+            
             Defaults = GetDefaults(TemplateParser.Parse(routeTemplate), defaults);
 
 

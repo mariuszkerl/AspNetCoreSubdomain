@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.Extensions.WebEncoders.Testing;
 using Moq;
 using TestHelpers;
@@ -35,6 +36,130 @@ public class FormTagHelperTests
                 "default",
                 "{area}",
                 "{controller=Home}/{action=Index}");
+        }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+        var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();
+
+        //Act
+        helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+            output);
+
+        //Assert
+        Assert.Empty(output.Content.GetContent());
+        Assert.Equal(expectedUrl, output.Attributes["action"].Value);
+    }
+    [Theory]
+    [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+    public void CanCreateInlineConstraintInSubdomainFormTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+    {
+        // Arrange
+        var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
+        {
+            routeBuilder.MapSubdomainRoute(
+                new[] { "example.com" },
+                "default",
+                "{area:bool}",
+                "{controller=Home}/{action=Index}");
+        }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+        var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();
+
+        //Act
+        helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+            output);
+
+        //Assert
+        Assert.Empty(output.Content.GetContent());
+        Assert.Equal(expectedUrl, output.Attributes["action"].Value);
+    }
+    [Theory]
+    [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+    public void CanCreateParameterConstraintSubdomainFormTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+    {
+        // Arrange
+        var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
+        {
+            routeBuilder.MapSubdomainRoute(
+                new[] { "example.com" },
+                "default",
+                "{area}",
+                "{controller=Home}/{action=Index}",
+                null,
+                new { area = new BoolRouteConstraint() });
+        }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+        var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();
+
+        //Act
+        helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+            output);
+
+        //Assert
+        Assert.Empty(output.Content.GetContent());
+        Assert.Equal(expectedUrl, output.Attributes["action"].Value);
+    }
+    [Theory]
+    [MemberData(nameof(MemberDataFactories.W3ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.W3ConstraintInSubdomainTestData))]
+    public void CanCreateW3InlineConstraintInSubdomainFormTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+    {
+        // Arrange
+        var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
+        {
+            routeBuilder.MapSubdomainRoute(
+                new[] { "example.com" },
+                "default",
+                "{area:bool}",
+                "{controller=Home}/{action=Index}");
+        }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+        var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();
+
+        //Act
+        helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+            output);
+
+        //Assert
+        Assert.Empty(output.Content.GetContent());
+        Assert.Equal(expectedUrl, output.Attributes["action"].Value);
+    }
+    [Theory]
+    [MemberData(nameof(MemberDataFactories.W3ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.W3ConstraintInSubdomainTestData))]
+    public void CanCreateW3ParameterConstraintSubdomainFormTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+    {
+        // Arrange
+        var helper = ConfigurationFactories.TagHelperFactory.GetForm(routeBuilder =>
+        {
+            routeBuilder.MapSubdomainRoute(
+                new[] { "example.com" },
+                "default",
+                "{area}",
+                "{controller=Home}/{action=Index}",
+                null,
+                new { area = new BoolRouteConstraint() });
         }, host, appRoot, controller, action, subdomain, expectedUrl);
 
         var output = ConfigurationFactories.TagHelperOutputFactory.GetForm();

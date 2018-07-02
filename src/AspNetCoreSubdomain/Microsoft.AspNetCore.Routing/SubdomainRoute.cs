@@ -5,13 +5,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing.Template;
 
 using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Microsoft.AspNetCore.Routing
 {
     public class SubDomainRoute : Route
     {
-        private readonly string w3 = "www.";
-        private readonly string w3Regex = "^www.";
+
+        private static readonly string w3 = "www.";
+        private static readonly string w3Regex = "^www.";
+        private static readonly IDictionary<string, Type> _unavailableConstraints = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "datetime", typeof(DateTimeRouteConstraint) },
+            { "decimal", typeof(DecimalRouteConstraint) },
+            { "double", typeof(DoubleRouteConstraint) },
+            { "float", typeof(FloatRouteConstraint) },
+        };
+
+        private readonly IDictionary<string, IRouteConstraint> constraintsWithSubdomainConstraint;
 
         public string[] Hostnames { get; private set; }
 
@@ -20,14 +34,53 @@ namespace Microsoft.AspNetCore.Routing
         public RouteTemplate SubdomainParsed { get; private set; }
 
         public SubDomainRoute(string[] hostnames, string subdomain, IRouter target, string routeName, string routeTemplate, RouteValueDictionary defaults, IDictionary<string, object> constraints,
-           RouteValueDictionary dataTokens, IInlineConstraintResolver inlineConstraintResolver)
+           RouteValueDictionary dataTokens, IInlineConstraintResolver inlineConstraintResolver, IOptions<RouteOptions> routeOptions)
            : base(target, routeName, routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
         {
             Hostnames = hostnames;
-            Subdomain = subdomain;
+
+            if (string.IsNullOrEmpty(subdomain))
+            {
+                return;
+            }
 
             SubdomainParsed = TemplateParser.Parse(subdomain);
+            Constraints = GetConstraints(inlineConstraintResolver, TemplateParser.Parse(routeTemplate), constraints);
+
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing
+            constraintsWithSubdomainConstraint = GetConstraints(ConstraintResolver, SubdomainParsed, null);
+
             Defaults = GetDefaults(SubdomainParsed, Defaults);
+            //Defaults = GetDefaults(TemplateParser.Parse(routeTemplate), defaults);
+
+
+            if (constraintsWithSubdomainConstraint.Count == 1)
+            {
+                Subdomain = RemoveConstraint(subdomain);
+            }
+            else
+            {
+                Subdomain = subdomain;
+            }
+
+            if (IsParameterName(Subdomain))
+            {
+                if (constraintsWithSubdomainConstraint.Any(x => _unavailableConstraints.Values.Contains(x.Value.GetType()) && x.Key == ParameterNameFrom(Subdomain)))
+                {
+                    throw new ArgumentException($"Constraint invalid on subdomain! " +
+                        $"Constraints: {string.Join(Environment.NewLine, _unavailableConstraints.Select(x => x.Key))}{Environment.NewLine}are unavailable for subdomain.");
+                }
+
+                foreach (var c in Constraints)
+                {
+                    constraintsWithSubdomainConstraint.Add(c);
+                }
+
+                if (Constraints.Keys.Contains(ParameterNameFrom(subdomain)))
+                {
+                    Constraints.Remove(ParameterNameFrom(subdomain));
+                }
+            }
         }
 
         public override Task RouteAsync(RouteContext context)
@@ -58,6 +111,7 @@ namespace Microsoft.AspNetCore.Routing
                 return Task.CompletedTask;
             }
 
+            var parsedTemplate = TemplateParser.Parse(Subdomain);
             //that's for overriding default for subdomain
             if (IsParameterName(Subdomain) &&
                 Defaults.ContainsKey(ParameterNameFrom(Subdomain)) &&
@@ -65,6 +119,25 @@ namespace Microsoft.AspNetCore.Routing
             {
                 context.RouteData.Values.Add(ParameterNameFrom(Subdomain), subdomain);
             }
+
+            if (IsParameterName(Subdomain) &&
+                constraintsWithSubdomainConstraint.ContainsKey(ParameterNameFrom(Subdomain)))
+            {
+                if (!RouteConstraintMatcher.Match(
+                        constraintsWithSubdomainConstraint,
+                        new RouteValueDictionary
+                        {
+                            {  ParameterNameFrom(Subdomain), subdomain }
+                        },
+                        context.HttpContext,
+                        this,
+                        RouteDirection.IncomingRequest,
+                        context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(RouteConstraintMatcher).FullName)))
+                {
+                    return Task.CompletedTask;
+                }
+            }
+
 
             return base.RouteAsync(context);
         }
@@ -255,7 +328,7 @@ namespace Microsoft.AspNetCore.Routing
 
             var hostBuilder = new StringBuilder();
 
-            if(context.HttpContext.Request.Host.Value.StartsWith(w3))
+            if (context.HttpContext.Request.Host.Value.StartsWith(w3))
             {
                 hostBuilder.Append(w3);
             }
@@ -263,6 +336,11 @@ namespace Microsoft.AspNetCore.Routing
             buildAction(hostBuilder, host);
 
             return hostBuilder;
+        }
+
+        private string RemoveConstraint(string segment)
+        {
+            return $"{segment.Substring(0, segment.IndexOf(':'))}}}";
         }
     }
 }

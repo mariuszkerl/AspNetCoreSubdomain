@@ -96,5 +96,33 @@ namespace TestHelpers
                 yield return new object[] { "www.constantsubdomain.example.com", "/", "Test", "About", "/Test/About" };
             }
         }
+        public static class ConstraintInSubdomainTestData
+        {
+            public static IEnumerable<object[]> Generate()
+            {
+                yield return new object[] { "example.com", "/", "true", "Home", "Index", "http://true.example.com/" };
+                yield return new object[] { "example.com", "/", "true", "Home", "About", "http://true.example.com/Home/About" };
+                yield return new object[] { "example.com", "/", "true", "Test", "Index", "http://true.example.com/Test" };
+                yield return new object[] { "example.com", "/", "true", "Test", "About", "http://true.example.com/Test/About" };
+                yield return new object[] { "true.example.com", "/", "true", "Home", "Index", "/" };
+                yield return new object[] { "true.example.com", "/", "true", "Home", "About", "/Home/About" };
+                yield return new object[] { "true.example.com", "/", "true", "Test", "Index", "/Test" };
+                yield return new object[] { "true.example.com", "/", "true", "Test", "About", "/Test/About" };
+            }
+        }
+        public static class W3ConstraintInSubdomainTestData
+        {
+            public static IEnumerable<object[]> Generate()
+            {
+                yield return new object[] { "www.example.com", "/", "true", "Home", "Index", "http://www.true.example.com/" };
+                yield return new object[] { "www.example.com", "/", "true", "Home", "About", "http://www.true.example.com/Home/About" };
+                yield return new object[] { "www.example.com", "/", "true", "Test", "Index", "http://www.true.example.com/Test" };
+                yield return new object[] { "www.example.com", "/", "true", "Test", "About", "http://www.true.example.com/Test/About" };
+                yield return new object[] { "www.true.example.com", "/", "true", "Home", "Index", "/" };
+                yield return new object[] { "www.true.example.com", "/", "true", "Home", "About", "/Home/About" };
+                yield return new object[] { "www.true.example.com", "/", "true", "Test", "Index", "/Test" };
+                yield return new object[] { "www.true.example.com", "/", "true", "Test", "About", "/Test/About" };
+            }
+        }
     }
 }

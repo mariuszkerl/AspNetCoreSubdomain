@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
@@ -30,6 +31,139 @@ namespace AspNetCoreSubdomain.Tests
     public class AnchorTagHelperTests
     {
         [Theory]
+        [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+        public void CanCreateInlineConstraintInSubdomainAnchorTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            var helper = ConfigurationFactories.TagHelperFactory.GetAnchor(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area:bool}",
+                    "{controller=Home}/{action=Index}");
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+            var output = ConfigurationFactories.TagHelperOutputFactory.GetAnchor();
+
+            //Act
+            helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+                output);
+
+            //Assert
+            Assert.Empty(output.Content.GetContent());
+            Assert.Equal(1, output.Attributes.Count);
+            Assert.Equal("href", output.Attributes.First().Name);
+            Assert.Equal(expectedUrl, output.Attributes.First().Value);
+        }
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+        public void CanCreateParameterConstraintInSubdomainAnchorTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            var helper = ConfigurationFactories.TagHelperFactory.GetAnchor(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area}",
+                    "{controller=Home}/{action=Index}",
+                    null,
+                    new { area = new BoolRouteConstraint() });
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+            var output = ConfigurationFactories.TagHelperOutputFactory.GetAnchor();
+
+            //Act
+            helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+                output);
+
+            //Assert
+            Assert.Empty(output.Content.GetContent());
+            Assert.Equal(1, output.Attributes.Count);
+            Assert.Equal("href", output.Attributes.First().Name);
+            Assert.Equal(expectedUrl, output.Attributes.First().Value);
+        }
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.W3ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.W3ConstraintInSubdomainTestData))]
+        public void CanCreateW3InlineConstraintInSubdomainAnchorTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            var helper = ConfigurationFactories.TagHelperFactory.GetAnchor(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area:bool}",
+                    "{controller=Home}/{action=Index}");
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+            var output = ConfigurationFactories.TagHelperOutputFactory.GetAnchor();
+
+            //Act
+            helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+                output);
+
+            //Assert
+            Assert.Empty(output.Content.GetContent());
+            Assert.Equal(1, output.Attributes.Count);
+            Assert.Equal("href", output.Attributes.First().Name);
+            Assert.Equal(expectedUrl, output.Attributes.First().Value);
+        }
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.W3ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.W3ConstraintInSubdomainTestData))]
+        public void CanCreateW3ParameterConstraintInSubdomainAnchorTagHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            var helper = ConfigurationFactories.TagHelperFactory.GetAnchor(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{area}",
+                    "{controller=Home}/{action=Index}",
+                    null,
+                    new { area = new BoolRouteConstraint() });
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+
+            var output = ConfigurationFactories.TagHelperOutputFactory.GetAnchor();
+
+            //Act
+            helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
+                output);
+
+            //Assert
+            Assert.Empty(output.Content.GetContent());
+            Assert.Equal(1, output.Attributes.Count);
+            Assert.Equal("href", output.Attributes.First().Name);
+            Assert.Equal(expectedUrl, output.Attributes.First().Value);
+        }
+
+        [Theory]
         [MemberData(nameof(MemberDataFactories.AreaInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaInSubdomainTestData))]
         public void CanCreateAreaInSubdomainAnchorTagHelper(
             string host,
@@ -48,11 +182,11 @@ namespace AspNetCoreSubdomain.Tests
                     "{area}",
                     "{controller=Home}/{action=Index}");
             }, host, appRoot, controller, action, subdomain, expectedUrl);
-            
+
             var output = ConfigurationFactories.TagHelperOutputFactory.GetAnchor();
 
             //Act
-            helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(), 
+            helper.Process(ConfigurationFactories.TagHelperContextFactory.Get(),
                 output);
 
             //Assert

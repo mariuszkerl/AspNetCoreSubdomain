@@ -21,11 +21,88 @@ using System.IO;
 using System.Buffers;
 using System.Globalization;
 using Microsoft.Extensions.WebEncoders.Testing;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace AspNetCoreSubdomain.Tests
 {
     public class ActionLinkHtmlHelperTests
     {
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+        public void CanCreateInlineConstraintSubdomainActionLinkHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedLink = $"<a href=\"HtmlEncode[[{expectedUrl}]]\">HtmlEncode[[Test]]</a>";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{parameter:int}",
+                    "{controller=Home}/{action=Index}");
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+            // Act
+            var actualLink = htmlHelper.ActionLink(
+                                            linkText: "Test",
+                                            actionName: action,
+                                            controllerName: controller,
+                                            routeValues: new { parameter = subdomain });
+            string resultHtml;
+            using (var writer = new StringWriter())
+            {
+                actualLink.WriteTo(writer, new HtmlTestEncoder());
+                resultHtml = writer.ToString();
+            }
+
+            // Assert
+            Assert.Equal(expectedLink, resultHtml);
+        }
+
+        [Theory]
+        [MemberData(nameof(MemberDataFactories.ConstraintInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ConstraintInSubdomainTestData))]
+        public void CanCreateParameterConstraintSubdomainActionLinkHtmlHelper(
+            string host,
+            string appRoot,
+            string subdomain,
+            string controller,
+            string action,
+            string expectedUrl)
+        {
+            // Arrange
+            string expectedLink = $"<a href=\"HtmlEncode[[{expectedUrl}]]\">HtmlEncode[[Test]]</a>";
+            var htmlHelper = ConfigurationFactories.HtmlHelperFactory.Get(routeBuilder =>
+            {
+                routeBuilder.MapSubdomainRoute(
+                    new[] { "example.com" },
+                    "default",
+                    "{parameter}",
+                    "{controller=Home}/{action=Index}",
+                    null,
+                    new { parameter = new BoolRouteConstraint() });
+            }, host, appRoot, controller, action, subdomain, expectedUrl);
+            // Act
+            var actualLink = htmlHelper.ActionLink(
+                                            linkText: "Test",
+                                            actionName: action,
+                                            controllerName: controller,
+                                            routeValues: new { parameter = subdomain });
+            string resultHtml;
+            using (var writer = new StringWriter())
+            {
+                actualLink.WriteTo(writer, new HtmlTestEncoder());
+                resultHtml = writer.ToString();
+            }
+
+            // Assert
+            Assert.Equal(expectedLink, resultHtml);
+        }
+
         [Theory]
         [MemberData(nameof(MemberDataFactories.AreaInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.AreaInSubdomainTestData))]
         public void CanCreateAreaSubdomainActionLinkHtmlHelper(
@@ -62,7 +139,7 @@ namespace AspNetCoreSubdomain.Tests
             // Assert
             Assert.Equal(expectedLink, resultHtml);
         }
-        
+
         [Theory]
         [MemberData(nameof(MemberDataFactories.ControllerInSubdomainTestData.Generate), MemberType = typeof(MemberDataFactories.ControllerInSubdomainTestData))]
         public void CanCreateControllerSubdomainActionLinkHtmlHelper(

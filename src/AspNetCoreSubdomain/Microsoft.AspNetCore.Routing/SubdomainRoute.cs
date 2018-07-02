@@ -49,8 +49,9 @@ namespace Microsoft.AspNetCore.Routing
 
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing
             constraintsWithSubdomainConstraint = GetConstraints(ConstraintResolver, SubdomainParsed, null);
-            
-            Defaults = GetDefaults(TemplateParser.Parse(routeTemplate), defaults);
+
+            Defaults = GetDefaults(SubdomainParsed, Defaults);
+            //Defaults = GetDefaults(TemplateParser.Parse(routeTemplate), defaults);
 
 
             if (constraintsWithSubdomainConstraint.Count == 1)

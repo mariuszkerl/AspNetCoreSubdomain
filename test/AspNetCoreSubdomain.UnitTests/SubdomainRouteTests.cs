@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Builder;
 using System.Threading.Tasks;
 using TestHelpers;
+using Microsoft.Extensions.Options;
 
 namespace AspNetCoreSubdomain.Tests
 {
@@ -31,7 +32,7 @@ namespace AspNetCoreSubdomain.Tests
                 null,
                 null,
                 null,
-                Mock.Of<IInlineConstraintResolver>());
+                Mock.Of<IInlineConstraintResolver>(), Mock.Of<IOptions<RouteOptions>>());
 
             //Assert
             Assert.Equal("Home", subdomainRoute.Defaults["controller"]);

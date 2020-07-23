@@ -20,17 +20,15 @@ namespace AspNetCoreSubdomain.RoutesWithoutSubdomain
         {
             // Add framework services.
             services.AddSubdomains();
-            services.AddMvc();
+            services.AddMvc(x => x.EnableEndpointRouting = false);
 
             services.AddScoped<SubdomainRoutingResponseGenerator>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            loggerFactory.AddDebug();
-
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             var hosts = new[] { "localhost" };

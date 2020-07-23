@@ -56,7 +56,8 @@ namespace TestHelpers
             {
                 return new ActionContext
                 {
-                    HttpContext = context
+                    HttpContext = context,
+                    RouteData = new RouteData()
                 };
             }
         }

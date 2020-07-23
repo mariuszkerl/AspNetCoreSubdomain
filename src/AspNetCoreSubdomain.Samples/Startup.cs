@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace AspNetCoreSubdomain.Samples
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -30,27 +24,16 @@ namespace AspNetCoreSubdomain.Samples
         {
             // Add framework services.
             services.AddSubdomains();
-            services.AddMvc();
+            services.AddMvc(x => x.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
+            app.UseExceptionHandler("/Home/Error");
             app.UseStaticFiles();
 
+            app.UseRouting();
             app.UseMvc(routes =>
             {
                 var hostnames = new[] { "localhost:54575" };
@@ -109,9 +92,9 @@ namespace AspNetCoreSubdomain.Samples
                     "",
                     new { controller = "Home", action = "Action2" });
 
-                routes.MapRoute(hostnames, 
-                "NormalRoute", 
-                "{controller}/{action}", 
+                routes.MapRoute(hostnames,
+                "NormalRoute",
+                "{controller}/{action}",
                 new { Action = "Index", Controller = "Home" });
             });
         }

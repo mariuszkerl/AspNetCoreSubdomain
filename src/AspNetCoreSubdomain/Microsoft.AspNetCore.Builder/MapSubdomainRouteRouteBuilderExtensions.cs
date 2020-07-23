@@ -69,7 +69,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             var routeOptions = (IOptions<RouteOptions>)routeBuilder.ServiceProvider.GetService(typeof(IOptions<RouteOptions>));
             routeBuilder.Routes.Add(new SubDomainRoute(hostnames, subdomain, routeBuilder.DefaultHandler, name, template, new RouteValueDictionary(defaults), new RouteValueDictionary(constraints), new RouteValueDictionary(dataTokens),
-                new DefaultInlineConstraintResolver(routeOptions), routeOptions));
+                new DefaultInlineConstraintResolver(routeOptions, routeBuilder.ServiceProvider), routeOptions));
 
             return routeBuilder;
         }

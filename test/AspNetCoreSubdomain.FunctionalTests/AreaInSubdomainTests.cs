@@ -18,7 +18,7 @@ namespace AspNetCoreSubdomain.FunctionalTests
         public AreaInSubdomainTests()
         {
             _server = new TestServer(new WebHostBuilder()
-                .UseStartup<AspNetCoreSubdomain.SubdomainsAreaWebSite.Startup>());
+                .UseStartup<SubdomainsAreaWebSite.Startup>());
             _client = _server.CreateClient();
         }
 

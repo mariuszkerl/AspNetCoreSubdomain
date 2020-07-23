@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Moq;
 using System;
@@ -56,7 +55,8 @@ namespace TestHelpers
             {
                 return new ActionContext
                 {
-                    HttpContext = context
+                    HttpContext = context,
+                    RouteData = new RouteData()
                 };
             }
         }

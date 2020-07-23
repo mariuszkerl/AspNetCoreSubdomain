@@ -1,15 +1,15 @@
 ﻿@model string
 @{
     ViewData["Title"] = "Home Page";
-    var bootstrapBtn = new { @class = "btn btn-primary btn-lg btn-block" };
+    var bootstrapBtn = new { @@class = "btn btn-primary btn-lg btn-block" };
 }
 
-@Html.Partial("_NavPills")
-@Html.Partial("_DisplayModel", Model)
+@await Html.PartialAsync("_NavPills")
+@await Html.PartialAsync("_DisplayModel", Model)
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
-            @Html.Partial("Urls")
+            @await Html.PartialAsync("Urls")
         </div>
     </div>
 </div>

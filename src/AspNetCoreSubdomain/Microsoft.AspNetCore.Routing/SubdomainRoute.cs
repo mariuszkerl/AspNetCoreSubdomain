@@ -38,7 +38,7 @@ namespace Microsoft.AspNetCore.Routing
            : base(target, routeName, routeTemplate, defaults, constraints, dataTokens, inlineConstraintResolver)
         {
             Hostnames = hostnames;
-
+            
             if (string.IsNullOrEmpty(subdomain))
             {
                 return;

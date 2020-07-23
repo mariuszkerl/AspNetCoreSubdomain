@@ -1,4 +1,4 @@
 @model string
-@Html.Partial("_NavPills")
-@Html.Partial("_RouteValues")
-@Html.Partial("_DisplayModel", Model)
+@await Html.PartialAsync("_NavPills")
+@await Html.PartialAsync("_RouteValues")
+@await Html.PartialAsync("_DisplayModel", Model)

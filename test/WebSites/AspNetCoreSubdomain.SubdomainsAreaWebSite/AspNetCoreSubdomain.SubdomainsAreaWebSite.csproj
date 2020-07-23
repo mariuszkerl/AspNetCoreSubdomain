@@ -1,20 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssetTargetFallback>portable-net45+win8</AssetTargetFallback>
   </PropertyGroup>
-
-
-  <ItemGroup>
-  <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\AspNetCoreSubdomain\AspNetCoreSubdomain.csproj" />
     <ProjectReference Include="..\..\AspNetCoreSubdomain.WebSites.Core\AspNetCoreSubdomain.WebSites.Core.csproj" />
   </ItemGroup>
-
-
 </Project>

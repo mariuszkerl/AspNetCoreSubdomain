@@ -9,6 +9,8 @@ Goal of that lib is to make subdomain routing easy to use in asp net core mvc ap
 2. Make links, forms urls etc. in views as you would do with helpers in your cshtml pages.
 3. Catch all route values in controller.
 
+**Important note, this library does not work currently with the endpoint routing.**
+
 ### Continuous Integration
 | Build server                | Build status                                                                                                                                                        | Unit tests                                                                                                                                                   | Integration tests                                                                                                                                                   | Functional tests                                                                                                                                                   |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -27,7 +29,7 @@ public void ConfigureServices(IServiceCollection services)
     // Add framework services.
     //...
     services.AddSubdomains();
-    services.AddMvc();
+    services.AddMvc(x => x.EnableEndpointRouting = false);
 }
 ```
 You configure your routes just like standard routes, but you cannot use standard ```MapRoute``` methods. That will be explained later in wiki. Use MapRoute method from this lib extensions method which accepts ```hostnames``` as a parameter.

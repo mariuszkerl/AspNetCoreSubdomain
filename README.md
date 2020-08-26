@@ -9,7 +9,7 @@ Goal of that lib is to make subdomain routing easy to use in asp net core mvc ap
 2. Make links, forms urls etc. in views as you would do with helpers in your cshtml pages.
 3. Catch all route values in controller.
 
-**Important note, this library does not work currently with the endpoint routing.**
+> **Important note, this library does not work currently with the endpoint routing.**
 
 ### Continuous Integration
 | Build server                | Build status                                                                                                                                                        | Unit tests                                                                                                                                                   | Integration tests                                                                                                                                                   | Functional tests                                                                                                                                                   |

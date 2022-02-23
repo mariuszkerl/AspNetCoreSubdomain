@@ -26,9 +26,9 @@ Your application have to be aware of using subdomains. Important thing is to use
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
+    services.AddSubdomains();
     // Add framework services.
     //...
-    services.AddSubdomains();
     services.AddMvc(x => x.EnableEndpointRouting = false);
 }
 ```
